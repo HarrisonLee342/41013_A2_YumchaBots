@@ -1,5 +1,4 @@
-# 41013_A2_YumchaBots
-41013 - Industrial Robotics Assignment 2
+# 41013 - Industrial Robotics Assignment 2: Yumcha Bots
 
 Project Title: Yumcha Bots <br>
 Group: <br>
