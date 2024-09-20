@@ -78,22 +78,22 @@ classdef Objects < handle
         %% GetObjectModel
         function model = GetObjectModel(objectType)
             switch lower(objectType)
-                case 'brick'
-                    name = 'brick';
-                    [faceData,vertexData] = plyread('HalfSizedRedGreenBrick.ply','tri');
+                % case 'brick'
+                %     name = 'brick';
+                %     [faceData,vertexData] = plyread('HalfSizedRedGreenBrick.ply','tri');
+                %     link1 = Link('alpha',0,'a',0,'d',0,'offset',0);
+                case 'dish'
+                    name = 'dish';
+                    [faceData,vertexData] = plyread('dish.ply','tri');
                     link1 = Link('alpha',0,'a',0,'d',0,'offset',0);
-                % case 'dish'
-                %     name = 'dish';
-                %     [faceData,vertexData] = plyread('dish.ply','tri');
-                %     link1 = Link('alpha',0,'a',0,'d',0,'offset',0);
-                % case 'dumplings'
-                %     name = 'dumplings';
-                %     [faceData,vertexData] = plyread('dumplings.ply','tri');
-                %     link1 = Link('alpha',0,'a',0,'d',0,'offset',0);
-                % case 'cart'
-                %     name = 'cart';
-                %     [faceData,vertexData] = plyread('cart.ply','tri');
-                %     link1 = Link('alpha',0,'a',0,'d',0,'offset',0);
+                case 'dumplings'
+                    name = 'dumplings';
+                    [faceData,vertexData] = plyread('dumplings.ply','tri');
+                    link1 = Link('alpha',0,'a',0,'d',0,'offset',0);
+                case 'cart'
+                    name = 'cart';
+                    [faceData,vertexData] = plyread('cart.ply','tri');
+                    link1 = Link('alpha',0,'a',0,'d',0,'offset',0);
                 otherwise
                     error('Unknown object type: %s', objectType);
             end
