@@ -102,10 +102,8 @@ classdef Environment < handle
         end
 
         function loadEnvironment(self)
-            % Clear figure and command window
-            clf;
-            clc;
-
+            clf
+            
             surf([-1,3; -1,3] ...
                 ,[-1,-1; 1,1] ...
                 ,[0,0; 0.01,0.01] ...
