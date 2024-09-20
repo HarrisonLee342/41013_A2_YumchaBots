@@ -1,4 +1,4 @@
-classdef RobotDishes < handle
+classdef RobotBricks < handle
     %   ROBOT BRICKS created by Harrison Lee - 13935857
     %   A class that creates a group of bricks up to 9
     %   Based off the RobotCow.m file    
@@ -25,7 +25,7 @@ classdef RobotDishes < handle
     end
     
     methods
-        %% Constructors
+        %% ...structors
         function self = RobotBricks(brickCount)
             if 0 < nargin
                 self.brickCount = brickCount;
