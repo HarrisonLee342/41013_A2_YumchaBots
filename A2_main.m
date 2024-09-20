@@ -36,16 +36,21 @@ classdef A2_main < handle
             else
                 disp('Robotics and Vision Toolbox(Modified) already loaded.');
             end
-
-            if exist('loadEnvironment','file') ~= 2
+            
+            % Environment Class
+            if exist('self = Environment()','file') ~= 2
                 addpath('Environment');
                 disp('Environment Folder loaded.');
             else 
                 disp('Environment Folder already loaded.');
             end
             self.Env = Environment();
+            
+            % Ply files folder
+            addpath('plyFiles');
 
-            % if exist('','file') ~= 2
+            % % Object class
+            % if exist('self = Object()','file') ~= 2
             %     addpath('Object');
             %     disp('Object Folder loaded.');
             % else 
