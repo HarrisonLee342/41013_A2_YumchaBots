@@ -1,4 +1,4 @@
-classdef RobotBricks < handle
+classdef RobotDumplings < handle
     %   ROBOT BRICKS created by Harrison Lee - 13935857
     %   A class that creates a group of bricks up to 9
     %   Based off the RobotCow.m file    
