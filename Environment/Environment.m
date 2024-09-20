@@ -104,8 +104,8 @@ classdef Environment < handle
         function loadEnvironment(self)
             clf
             
-            surf([-1,3; -1,3] ...
-                ,[-1,-1; 1,1] ...
+            surf([-8,8; -8,8] ...
+                ,[-8,-8; 8,8] ...
                 ,[0,0; 0.01,0.01] ...
                 ,'CData',imread('concrete.jpg') ... % Concrete from canvas
                 ,'FaceColor','texturemap');
@@ -123,11 +123,6 @@ classdef Environment < handle
             % Inital position stored for return
             self.initialState = self.LUR3e.model.getpos;
 
-            % Place bricks for the environment
-            for i = 1:9
-                self.vis_bricks(i) = PlaceObject('HalfSizedRedGreenBrick.ply' ...
-                    , self.brickInitial(i,:));
-            end
 
             % 'barrier1.5x0.2x1m.ply' from UTS Toolbox - 1.5(lenght) x 0.2(width) x 1(height)
             % Places fence at (-1, 0) at a length of 2m along the y-axis
