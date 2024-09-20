@@ -25,7 +25,7 @@ classdef RobotDumplings < handle
     end
     
     methods
-        %% ...structors
+        %% Constructors
         function self = RobotBricks(brickCount)
             if 0 < nargin
                 self.brickCount = brickCount;
