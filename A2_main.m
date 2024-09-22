@@ -11,26 +11,33 @@ classdef A2_main < handle
         % Evironment class
         Env
 
+        % UR3 Robotic Arm
+        ur3
+
+        % Kuka Robotic Arm
+        kuka
+
     end
 
     methods
         function self = A2_main()
 
             self.loadFiles();
+            self.setClassVariables();
 
-            % self.Env.loadEnvironment();
+            self.Env.loadEnvironment();
             
             
         end
     end
 
-    methods
-        
-        % Loading necessary file paths / toolbox
-        function loadFiles(self)
+    methods(Static)
 
-            % If toolbox is not added then load the toolbox
-            if exist('transl', 'file') ~= 2
+        % Loading necessary file paths / toolbox
+        function loadFiles()
+
+            % If toolbox is not added then load the toolbox            
+            if ~contains(path, 'rvctools_modified')
                 run('rvctools_modified/startup_rvc.m');
                 disp('Robotics and Vision Toolbox(Modified) loaded.');
             else
@@ -38,27 +45,56 @@ classdef A2_main < handle
             end
             
             % Environment Class
-            if exist('self = Environment()','file') ~= 2
+            if ~contains(path, 'Environment')
                 addpath('Environment');
                 disp('Environment Folder loaded.');
             else 
                 disp('Environment Folder already loaded.');
             end
-            self.Env = Environment();
+            
+            % Ply files folder
+            if ~contains(path, 'plyFiles')
+                addpath('plyFiles');
+                disp('Ply files folder loaded.');
+            else
+                disp('Ply files folder already loaded.');
+            end
+
+            % Object class
+            if ~contains(path, 'Objects')
+                addpath('Objects');
+                disp('Object Folder loaded.');
+            else 
+                disp('Object Folder already loaded.');
+            end
+        end
+
+        % Reloading folder paths for debugging
+        function reloadFiles()
+            
+            % Evironment
+            addpath('Environment');
             
             % Ply files folder
             addpath('plyFiles');
 
-            % % Object class
-            % if exist('self = Object()','file') ~= 2
-            %     addpath('Object');
-            %     disp('Object Folder loaded.');
-            % else 
-            %     disp('Object Folder already loaded.');
-            % end
-
+            % Object class
+            addpath('Objects');
 
         end
+    end
+
+    methods
+        
+        % Sets variables with classes
+        function setClassVariables(self)
+
+            %Environment Class
+            self.Env = Environment();
+
+        end
+
+        
         
     end
 end
