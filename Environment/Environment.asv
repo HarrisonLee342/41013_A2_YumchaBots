@@ -38,10 +38,10 @@ classdef Environment < handle
     properties
         %% Initialise changing variables
         % Robotic arm
-        ur3;
+        LUR3e;
 
         % Gripper
-        UR3Gripper;
+        LUR3eGripper;
 
         % Gripper point of attachment
         gripperOrigin;
@@ -114,19 +114,19 @@ classdef Environment < handle
             view(3);
             hold on;
             
-            % Round table (dia = 1.01167, height = 0.321) placed at [0, 0, 0.01]
+            % Round table (dia = 0.675, height = 0.324) placed at [0, 0, 0.01]
             PlaceObject('table.ply',[0,0,0.01]);
+
+            PlaceObject('plate.ply', [0, 0.25, 0.33]);
             
-            % Plate (Radius = 0.079)
-            PlaceObject('plate.ply', [0, 0.4, 0.34]);
+            % self.bricks = Objects(9, 'brick');
+            % for i = 1:size(self.brickInitial, 1)
+            %     self.bricks.objectModel{i}.base = SE3(self.brickInitial(i,:)).T;
+            %     self.bricks.objectModel{i}.animate(0);
+            % end
 
-            % cart (lenght = 0.448, width = 0.225, height = 0.381)
-            % height for arm is 0.344
-            % height for plate/dishes is 0.075
-            PlaceObject('cart.ply', [0.65, 0, 0]);
-
-            % Place the robot and gripper
-            self.ur3 = UR3(transl(0.65, 0, 0.35));
+            % % Place the robot and gripper
+            self.UR3 = UR3(transl(0,0,0.33));
             
             % self.gripperOrigin = self.LUR3e.model.fkine(self.LUR3e.model.getpos).T * self.gripperOrienCor;
             % self.LUR3eGripper = LinearUR3eGripper(self.gripperOrigin);

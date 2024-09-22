@@ -14,8 +14,8 @@ classdef A2_main < handle
         % UR3 Robotic Arm
         ur3
 
-        % Kuku Robotic Arm
-        kuku
+        % Kuka Robotic Arm
+        kuka
 
     end
 
@@ -25,7 +25,7 @@ classdef A2_main < handle
             self.loadFiles();
             self.setClassVariables();
 
-            % self.Env.loadEnvironment();
+            self.Env.loadEnvironment();
             
             
         end

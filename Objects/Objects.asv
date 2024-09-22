@@ -31,8 +31,8 @@ classdef Objects < handle
                 self.num = num;
             end
 
-            self.workspaceDimensions = [workspace/2, workspace/2, ...
-                workspace/2, workspace/2, ...
+            self.workspaceDimensions = [self.workspace/2, self.workspace/2, ...
+                self.workspace/2, self.workspace/2, ...
                 0, self.maxHeight];
 
             % Create the required number of objects
@@ -78,18 +78,30 @@ classdef Objects < handle
         %% GetObjectModel
         function model = GetObjectModel(objectType)
             switch lower(objectType)
-                case 'dish'
-                    [faceData,vertexData] = plyread('dish.ply','tri');
+
+                % Plate (Radius = 0.079)
+                case 'plate'
+                    name = 'plate';
+                    [faceData,vertexData] = plyread('plate.ply','tri');
+                    link1 = Link('alpha',0,'a',0,'d',0,'offset',0);
+                % Dumplings (Radius = 0.065m, height = 0.025m)
                 case 'dumplings'
+                    name = 'dumplings';
                     [faceData,vertexData] = plyread('dumplings.ply','tri');
+                    link1 = Link('alpha',0,'a',0,'d',0,'offset',0);
+                    
+                % cart (lenght = 0.448, width = 0.225, height = 0.381)
+                % height for arm is 0.344
+                % height for plate/dishes is 0.075
                 case 'cart'
+                    name = 'cart';
                     [faceData,vertexData] = plyread('cart.ply','tri');
+                    link1 = Link('alpha',0,'a',0,'d',0,'offset',0);
+
                 otherwise
                     error('Unknown object type: %s', objectType);
             end
 
-            [faceData,vertexData] = plyread('HalfSizedRedGreenBrick.ply','tri');
-            link1 = Link('alpha',0,'a',0,'d',0,'offset',0);
             model = SerialLink(link1,'name',name);
 
             % Changing order of cell array from {faceData, []} to
