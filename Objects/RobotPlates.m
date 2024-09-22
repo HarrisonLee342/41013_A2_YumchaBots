@@ -8,6 +8,7 @@ classdef RobotPlates < handle
     properties (Constant)
         %> Max height is for plotting of the workspace
         maxHeight = 10;
+        maxCount = 13030; 
     end
     
     properties
