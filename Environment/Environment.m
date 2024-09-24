@@ -118,7 +118,7 @@ classdef Environment < handle
             PlaceObject('table.ply',[0,0,0.01]);
             
             % Plate (Radius = 0.079)
-            PlaceObject('plate.ply', [0, 0.4, 0.33]);
+            PlaceObject('plate.ply', [0, 0.4, 0.325]);
 
             % Dumpling tray (Radius = 0.055m, height = 0.035m)
             PlaceObject('dumpling_tray.ply', [0, 0.2, 0.33]);
