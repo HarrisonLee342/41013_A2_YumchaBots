@@ -114,14 +114,14 @@ classdef Environment < handle
             view(3);
             hold on;
             
-            % Round table (dia = 1.01167, r = 0.5 height = 0.3225) placed at [0, 0, 0.01]
+            % Round table (dia = 1.01167, height = 0.321) placed at [0, 0, 0.01]
             PlaceObject('table.ply',[0,0,0.01]);
             
             % Plate (Radius = 0.079)
-            PlaceObject('plate.ply', [0, 0.4, 0.33]);
+            PlaceObject('plate.ply', [0, 0.4, 0.34]);
 
             % Dumpling tray (Radius = 0.055m, height = 0.035m)
-            PlaceObject('dumpling_tray.ply', [0, 0.2, 0.33]);
+            PlaceObject('dumpling_.ply', [0, 0.4, 0.34]);
 
             % cart (lenght = 0.448, width = 0.225, height = 0.381)
             % height for arm is 0.344
@@ -130,14 +130,6 @@ classdef Environment < handle
 
             % Place the robot and gripper
             self.ur3 = UR3(transl(0.65, 0, 0.35));
-
-            % % Add objects
-            % self.bricks = Objects('plate', 9);
-            % for i = 1:size(self.brickInitial, 1)
-            %     self.bricks.brickModel{i}.base = SE3(self.brickInitial(i,:)).T;
-            %     self.bricks.brickModel{i}.animate(0);
-            % end
-          
             
             % self.gripperOrigin = self.LUR3e.model.fkine(self.LUR3e.model.getpos).T * self.gripperOrienCor;
             % self.LUR3eGripper = LinearUR3eGripper(self.gripperOrigin);

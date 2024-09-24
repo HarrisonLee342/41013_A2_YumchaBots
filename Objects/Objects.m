@@ -26,7 +26,7 @@ classdef Objects < handle
 
     methods
         %% Constructors
-        function self = Objects(num, objectType)
+        function self = Objects(objectType, num)
             if 0 < nargin
                 self.num = num;
             end
@@ -84,10 +84,11 @@ classdef Objects < handle
                     name = 'plate';
                     [faceData,vertexData] = plyread('plate.ply','tri');
                     link1 = Link('alpha',0,'a',0,'d',0,'offset',0);
-                % Dumplings (Radius = 0.065m, height = 0.025m)
+
+                % Dumplings (Radius = 0.055m, height = 0.035m)
                 case 'dumplings'
                     name = 'dumplings';
-                    [faceData,vertexData] = plyread('dumplings.ply','tri');
+                    [faceData,vertexData] = plyread('dumpling_tray.ply','tri');
                     link1 = Link('alpha',0,'a',0,'d',0,'offset',0);
                     
                 % cart (lenght = 0.448, width = 0.225, height = 0.381)

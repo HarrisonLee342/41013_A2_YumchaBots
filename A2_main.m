@@ -38,7 +38,7 @@ classdef A2_main < handle
 
             % If toolbox is not added then load the toolbox            
             if ~contains(path, 'rvctools_modified')
-                run('rvctools_modified/startup_rvc.m');
+                run('rvctools_modifiedUTS/startup_rvc.m');
                 disp('Robotics and Vision Toolbox(Modified) loaded.');
             else
                 disp('Robotics and Vision Toolbox(Modified) already loaded.');
