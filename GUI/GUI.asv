@@ -114,25 +114,6 @@ classdef A2_main < handle
 
         end
 
-        % Reloading folder paths for debugging
-        function reloadFiles()
-
-            % Evironment
-            addpath('Environment');
-
-            % Ply files folder
-            addpath('plyFiles');
-
-            % Object class
-            addpath('Objects');
-
-            % Robotic Arm and Grippers class
-            addpath('RoboticArms');
-
-            % Movement class
-            addpath('Movement');
-
-        end
     end
 end
 
