@@ -17,3 +17,9 @@ KUKA KR 6 R900 - We wanted a robotic arm with greater reach and a higher payload
 
 Existing robotic arm: <br>
 Universal Robots UR3 <br>
+
+Code Function: <br>
+GUI - where you can request for plates and dumplings, emergancy stop <br>
+
+To Do Tasks: <br>
+- add chairs <br>
