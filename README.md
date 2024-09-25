@@ -22,10 +22,11 @@ Code Function: <br>
 GUI - where you can request for plates and dumplings, emergancy stop <br>
 
 To Do Tasks: <br>
-- add chairs 
 - model KUKA robotic arm
 - GUI
 - Collision detection
 - Grippers
 - Robot class folder
 - trolley movement
+- robotic arm movement
+- initial position to final position etc
