@@ -30,3 +30,9 @@ To Do Tasks: <br>
 - trolley movement
 - robotic arm movement
 - initial position to final position etc
+
+Notes:<br>
+- object class draft completed, cart edit to be 2 links? 
+one prismatic and one revolute to allow for the cart to rotate and move? 
+(z axis rotation - wheels) (z-axis translocation for kart)?
+- might need to adjust scale of objects
