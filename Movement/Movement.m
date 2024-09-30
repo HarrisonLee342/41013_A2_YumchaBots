@@ -1,5 +1,6 @@
 classdef Movement < handle
-
+    % Class created by Harrison Lee - 13935857
+    
     properties(Constant)
         %% Constant variables
 

@@ -1,5 +1,6 @@
 classdef Environment < handle
-
+    % Class created by Harrison Lee - 13935857
+    
     properties(Constant)
         %% Initialise constant variables
 
@@ -51,6 +52,9 @@ classdef Environment < handle
         chairs;
         numChairs;
         chairsInitial;
+        
+        % Range Plot
+        plot;
 
         % Testing
         testgripper
@@ -182,6 +186,64 @@ classdef Environment < handle
             delete(self.dumplings);
             delete(self.carts);
             
+        end
+
+        function RangePlot(self, arm)
+
+            stepRads = deg2rad(45); 
+
+            % stepValue = 0.05;               % Steps for the prismatic joint
+            qlim = arm.qlim;
+
+            pointCloudeSize = prod(floor((qlim(1:6,2)-qlim(1:6,1))/stepRads + 1));
+            % pointCloudeSize = floor((qlim(1,2)-qlim(1,1))/stepValue + 1) * ...
+            %                           prod(floor((qlim(2:6,2)-qlim(2:6,1))/stepRads + 1));
+
+
+            pointCloud = zeros(pointCloudeSize,3);
+
+            counter = 1;
+            tic
+            
+            for q1 = qlim(1,1):stepRads:qlim(1,2) 
+                for q2 = qlim(2,1):stepRads:qlim(2,2)
+                    for q3 = qlim(3,1):stepRads:qlim(3,2)
+                        for q4 = qlim(4,1):stepRads:qlim(4,2)
+                            for q5 = qlim(5,1):stepRads:qlim(5,2)
+                                q6 = 0;
+                                q = [q1,q2,q3,q4,q5,q6];
+                                % fkineUTS 10 times faster
+                                % tr = self.LUR3e.model.fkine(q).T;
+                                tr = arm.fkineUTS(q); % Endeffector Forward Kinematics
+                                pointCloud(counter,:) = tr(1:3,4)';
+                                counter = counter + 1;
+                                if mod(counter/pointCloudeSize * 100,1) == 0
+                                    disp(['After ',num2str(toc),' seconds, completed ',num2str(counter/pointCloudeSize * 100),'% of poses']);
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+
+            % Plotting 3D model showing where the end effector can be over all these samples
+            self.plot = plot3(pointCloud(:,1),pointCloud(:,2),pointCloud(:,3),'r.');
+            axis tight;
+            
+            % % Take the MAX and MIN point from point cloud matrix
+            % maxPoint = max(pointCloud); % [x, y, z]; x=1, y=2, z=3
+            % minPoint = min(pointCloud); % [x, y, z]; x=1, y=2, z=3
+            % 
+            % radius = (maxPoint(1) + abs(minPoint(1)))/2;
+            % volume = (radius^3)*4/3*pi;
+            % 
+            % disp(['Volume: ',num2str(volume), 'm^3  |  Radius: ', num2str(radius), 'm;']);
+            % 
+            % maxDistance = norm(maxPoint - self.origin);
+            % 
+            % disp(['Robotic arms maximum reach: ', num2str(maxDistance), 'm;']);
+            % 
+            % input('Workspace Calulation Completed');
         end
     end
 
