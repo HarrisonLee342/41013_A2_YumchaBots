@@ -53,11 +53,11 @@ classdef UR3Modified < RobotBaseClass
             link(6) = Link([0      0.0819    0         0    0]);
 
             % Incorporate joint limits
-            link(1).qlim = [-90 90]*pi/180;
-            link(2).qlim = [-90 90]*pi/180;
-            link(3).qlim = [-90 90]*pi/180;
-            link(4).qlim = [-360 360]*pi/180;
-            link(5).qlim = [-90 90]*pi/180;  
+            link(1).qlim = [-180 180]*pi/180;
+            link(2).qlim = [-180 180]*pi/180;
+            link(3).qlim = [-180 180]*pi/180;
+            link(4).qlim = [-180 180]*pi/180;
+            link(5).qlim = [-180 180]*pi/180;  
             link(6).qlim = [-360 360]*pi/180;
 
             link(1).offset = -pi;
