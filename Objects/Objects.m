@@ -15,7 +15,7 @@ classdef Objects < handle
         objNum;
 
         %> A cell structure of \c objNum object models
-        objectModel;
+        model;
 
         %> workspace in meters
         workspace = [3,3];
@@ -38,12 +38,12 @@ classdef Objects < handle
             % Create the required number of objects
             for i = 1:num
                 % Use objectType to determine which model to load (dish, dumplings, cart)
-                self.objectModel{i} = self.GetObjectModel(objectType, i);
+                self.model{i} = self.GetObjectModel(objectType, i);
 
                 % Object location for base
                 basePose = transl(0,0,0);
 
-                self.objectModel{i}.base = basePose;
+                self.model{i}.base = basePose;
 
                 % Hold on after the first plot (if already on there's no difference)
                 if i == 1
@@ -59,7 +59,7 @@ classdef Objects < handle
 
         function delete(self)
             for index = 1:self.objNum
-                handles = findobj('Tag', self.objectModel{index}.name);
+                handles = findobj('Tag', self.model{index}.name);
                 h = get(handles,'UserData');
                 try delete(h.robot); end
                 try delete(h.wrist); end
