@@ -36,3 +36,5 @@ Notes:<br>
 one prismatic and one revolute to allow for the cart to rotate and move? 
 (z axis rotation - wheels) (z-axis translocation for kart)?
 - might need to adjust scale of objects
+- trying to get cart to move on its own, however i won't trying prismatic link / link ply files but
+running into issues
