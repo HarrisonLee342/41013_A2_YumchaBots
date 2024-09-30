@@ -14,9 +14,6 @@ classdef KUKA_K6 < RobotBaseClass
 %% Constructor
         
         function self = KUKA_K6(baseTr,useTool,toolFilename)
-            clf;
-            clc;
-            cla;
             if nargin < 3
                 if nargin == 2
                     error('If you set useTool you must pass in the toolFilename as well');
