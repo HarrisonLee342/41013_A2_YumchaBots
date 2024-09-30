@@ -1,8 +1,11 @@
 classdef A2_main < handle
+    % Class created by Harrison Lee - 13935857
 
     properties(Constant)
         %% Constant variables
 
+        % Animation steps:
+        steps = 50;
     end
 
     properties
@@ -47,24 +50,52 @@ classdef A2_main < handle
 
         methods
             function test(self)
-                for i = 1:size(self.env.platesInitial,1)
-                    platePose = self.env.platesInitial{i} * trotx(pi) * transl(0,0,-0.14);
-                    self.move.objectMovement(platePose, self.env.ur3.model, 50);
-                end
 
-                for i= 1:size(self.env.dumplingsInitial,1)
-                    dumplingPose = self.env.dumplingsInitial{4} * trotx(pi) * transl(0,0,-0.14);
-                    self.move.objectMovement(dumplingPose, self.env.kuka.model, 50);
-                end
-               
-                % for i = 1:size(self.env.platesInitial,1)
-                %     platePose = self.env.platesInitial(i,:).T * trotx(pi) * transl(0,0,-0.14);
-                %     self.move.objectMovement(platePose, self.env.kuka.model, 50);
+                % % UR3 to plate Movement
+                % for i = 1:size(self.env.platesInitial,2)
+                %     platePose = self.env.platesInitial{i} * trotx(pi) * transl(0,0,-0.14);
+                %     self.move.objectMovement(platePose, self.env.ur3.model, self.steps);
+                % end
+                
+                % % KUKA to dumpling tray Movement
+                % for i= 1:size(self.env.dumplingsInitial,2)
+                %     dumplingPose = self.env.dumplingsInitial{4} * trotx(pi) * transl(0,0,-0.14);
+                %     self.move.objectMovement(dumplingPose, self.env.kuka.model, self.steps);
                 % end
 
-                % for i = 1:size(self.env.platesInitial,1)
+                % % UR3 Range plot
+                % self.env.RangePlot(self.env.ur3.model);
+
+                % % KUKA Range plot
+                % self.env.RangePlot(self.env.kuka.model);
+
+                %% TESTING
+
+                % for i = 1:size(self.env.platesInitial,2)
+                %     platePose = self.env.platesInitial{2} * trotx(pi) * transl(0,0,-0.14);
+                %     self.move.objectMovement(platePose, self.env.ur3.model, self.steps);
+                % end
+
+                dumplingPose = self.env.dumplingsInitial{4} * trotx(pi) * transl(0,0,-0.14);
+                self.move.objectMovement(dumplingPose, self.env.kuka.model, self.steps);
+
+                disp('end effector')
+                disp(self.env.kuka.model.fkine(self.env.kuka.model.getpos).T)
+
+                for i = 1:size(self.env.dumplingsInitial,2)
+                    fprintf('Dumpling no: %d \n',i);
+                    disp(self.env.dumplingsInitial{i});
+                end
+                disp(size(self.env.dumplingsInitial));
+
+                % for i = 1:size(self.env.platesInitial,2)
+                %     platePose = self.env.platesInitial(i,:).T * trotx(pi) * transl(0,0,-0.14);
+                %     self.move.objectMovement(platePose, self.env.kuka.model, self.steps);
+                % end
+
+                % for i = 1:size(self.env.platesInitial,2)
                 %     platePose = transl(self.env.platesInitial(i,:)) * trotx(pi) * transl(0,0,-0.14);
-                %     self.move.objectMovement(platePose, self.env.kuka.model, 50);
+                %     self.move.objectMovement(platePose, self.env.kuka.model, self.steps);
                 % end
 
             end
@@ -74,7 +105,8 @@ classdef A2_main < handle
 
                 % Environment Class
                 self.env = Environment();
-
+   
+                % Movement Class
                 self.move = Movement();
 
             end

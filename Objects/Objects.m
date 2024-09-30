@@ -18,7 +18,7 @@ classdef Objects < handle
         objectModel;
 
         %> workspace in meters
-        workspace = [2,2];
+        workspace = [3,3];
 
         %> Dimensions of the workspace
         workspaceDimensions;
