@@ -26,7 +26,7 @@ classdef A2_main < handle
             self.setClassVariables();
 
             self.env.loadEnvironment();
-            drawnow();
+
             while true
 
                 input_val = input('test or 0 to exit: ', 's');
@@ -48,9 +48,24 @@ classdef A2_main < handle
         methods
             function test(self)
                 for i = 1:size(self.env.platesInitial,1)
-                    platePose = transl(self.env.platesInitial(i,:)) * trotx(pi) * transl(0,0,-0.14);
+                    platePose = self.env.platesInitial{i} * trotx(pi) * transl(0,0,-0.14);
                     self.move.objectMovement(platePose, self.env.ur3.model, 50);
                 end
+
+                for i= 1:size(self.env.dumplingsInitial,1)
+                    dumplingPose = self.env.dumplingsInitial{4} * trotx(pi) * transl(0,0,-0.14);
+                    self.move.objectMovement(dumplingPose, self.env.kuka.model, 50);
+                end
+               
+                % for i = 1:size(self.env.platesInitial,1)
+                %     platePose = self.env.platesInitial(i,:).T * trotx(pi) * transl(0,0,-0.14);
+                %     self.move.objectMovement(platePose, self.env.kuka.model, 50);
+                % end
+
+                % for i = 1:size(self.env.platesInitial,1)
+                %     platePose = transl(self.env.platesInitial(i,:)) * trotx(pi) * transl(0,0,-0.14);
+                %     self.move.objectMovement(platePose, self.env.kuka.model, 50);
+                % end
 
             end
 
