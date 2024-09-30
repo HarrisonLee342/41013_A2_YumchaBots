@@ -35,7 +35,7 @@ classdef Movement < handle
             end
         end
 
-        function objectMove(self, pose, arm, steps, object, objectIndex)
+        function armObjectMove(self, pose, arm, steps, object, object)
             % Moves the robotic arm to the desired position
             % Inputs:
             % - Pose: Selected position in transl format
@@ -49,10 +49,10 @@ classdef Movement < handle
             for j = 1:size(q,1)
                 arm.animate(q(j,:));
 
-                objectGripPose = arm.fkine(arm.getpos).T * transl(0, 0, 0.02);
-                object.model{objectIndex}.base = objectGripPose;
-                object.model{objectIndex}.animate(0);
-                
+                objectGripPose = arm.fkine(arm.getpos).T * transl(0, 0, 0.11);
+                object.objectModel{j}.base = objectGripPose;
+                object.objectModel{j}.animate(0);
+
                 drawnow();
                 pause(0.01);
                 
@@ -68,9 +68,9 @@ classdef Movement < handle
             % - objectIndex: The specific object number that the robot arm wants to pickup/move
             % - Steps: How smooth you want the animation to be, higher is smoother
 
-            cartPose = cart.model{cartIndex}.base.T;
+            cartPose = cart.objectModel{cartIndex}.base.T;
 
-            objectPose = object.model{objectIndex}.base.T;
+            objectPose = object.objectModel{objectIndex}.base.T;
 
             % the range the cart needs to stop within robot arms reach
             offsetDistance = 0.1;
@@ -84,7 +84,7 @@ classdef Movement < handle
             q = jtraj(cartPose, targetCartPose, steps);
 
             for j = 1:size(q,1)
-                cart.model{cartIndex}.animate(q(j,:));
+                cart.objectModel{cartIndex}.animate(q(j,:));
                 drawnow();
                 pause(0.01);
             end
