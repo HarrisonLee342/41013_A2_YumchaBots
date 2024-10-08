@@ -1,12 +1,12 @@
 # 41013 - Industrial Robotics Assignment 2: Yumcha Bots
 
 ## Project: Yumcha Bots <br>
-**Group:** <br>
+**Group Members:** <br>
   - *Harrison Lee - 13935857* <br>
   - *Sean Kim - 14282040* <br>
   - *Carlos Pham - 14272811* <br>
 
-**Files** <br>
+**Files:** <br>
 This repository utilises Peter Corke's Robotics Toolbox Modified by UTS<br>
 
 ## Project description <br>
