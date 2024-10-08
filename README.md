@@ -6,7 +6,7 @@ Harrison Lee - 13935857 <br>
 Sean Kim - 14282040 <br>
 Carlos Pham - 14272811 <br>
 
-**Files ** <br>
+**Files** <br>
 This repository utilises Peter Corke's Robotics Toolbox Modified by UTS<br>
 
 ## Project description <br>
@@ -14,11 +14,10 @@ Automated Yumcha services, Yumacha Bots will use 2 robotic arms to service and d
 
 ## Robotic Arms
 
-### Industrial robotic arm: <br>
-**KUKA KR 6 R900** - We wanted a robotic arm with greater reach and a higher payload capacity to provide us with flexibility in moving and placing dishes as they will often vary in weight. We wanted the greater reach of the arm, as the dishes will place at the centre of the table. <br>
+**Industrial robotic arm: KUKA KR 6 R900** <br>
+  - We wanted a robotic arm with greater reach and a higher payload capacity to provide us with flexibility in moving and placing dishes as they will often vary in weight. We wanted the greater reach of the arm, as the dishes will place at the centre of the table. <br>
 
-### Existing robotic arm: <br>
-**Universal Robots UR3** <br>
+**Existing robotic arm: Universal Robots UR3** <br>
 
 ### Code Function: <br>
 **GUI** - where you can request plates and dumplings, emergency stop <br>
