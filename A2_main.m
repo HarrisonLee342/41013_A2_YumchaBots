@@ -105,18 +105,26 @@ classdef A2_main < handle
             function testingCartMovement(self)
                 
                 % self.move.cartMove(self.env.carts, 1, self.env.plates, 4, self.steps);
+                % self.env.cartUR3 = YumchaCart(self.env.cartUR3Origin * trotz(pi/2));
+                % self.env.cartUR3.model.animate(0);
+                % drawnow();
 
-                cartPose = self.env.carts.model{1}.base.T;
+                targetPose = transl(-0.5, 0.5, 0);
 
-                targetPose = transl(1,0,0);
+                currentjoint = self.env.cartUR3.model.getpos;
 
-                q = jtraj(cartPose, targetPose, self.steps);
+                joints = self.env.cartUR3.model.ikcon(targetPose, currentjoint);
+
+                q = jtraj(currentjoint, joints, self.steps);
 
                 for j = 1:size(q,1)
-                    self.env.carts.model{1}.animate(q(j,:));
+                    self.env.cartUR3.model.animate(q(j,:));
                     drawnow();
                     pause(0.01);
                 end
+                
+                % self.env.cartUR3.moveToTarget(0.8,1);
+                
                 
             end
 
@@ -145,12 +153,12 @@ classdef A2_main < handle
                     disp('Robotics and Vision Toolbox(Modified) already loaded.');
                 end
 
-                % Robotic Arm and Grippers class
-                if ~contains(path, 'RoboticArms')
-                    addpath('RoboticArms');
-                    disp('RoboticArms Folder loaded.');
+                % Robot classes
+                if ~contains(path, 'RobotClasses')
+                    addpath('RobotClasses');
+                    disp('RobotClasses Folder loaded.');
                 else
-                    disp('RoboticArms Folder already loaded.');
+                    disp('RobotClasses Folder already loaded.');
                 end
 
                 % Environment Class
@@ -199,8 +207,8 @@ classdef A2_main < handle
                 % Object class
                 addpath('Objects');
 
-                % Robotic Arm and Grippers class
-                addpath('RoboticArms');
+                % Robot Classes
+                addpath('RobotClasses');
 
                 % Movement class
                 addpath('Movement');
