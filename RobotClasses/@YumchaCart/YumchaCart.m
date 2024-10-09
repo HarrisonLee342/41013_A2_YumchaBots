@@ -39,55 +39,20 @@ classdef YumchaCart < RobotBaseClass
 
         %% CreateModel
         function CreateModel(self)
+            % link = Link([offset     d       a       alpha    'prismatic']);
 
-            % link(1) = Link('alpha',0,'a',0,'d',0.001,'offset',0);
-            % link(2) = Link([ 0     0.001   0   -pi/2   1]); % PRIMATIC LINK
+            link(1) = Link([0      0.05   0.15    pi/2     0]);
+            link(2) = Link([ 0     0.15   0    -pi/2   1]); % PRIMATIC LINK
+
+            link(1).qlim = [-360 360]*pi/180;
+            link(2).qlim = [-10 10]; % Limits for the PRISMATIC joint
+
+            % link(1) = Link([ 0     0.001   0    -pi/2   1]); % PRIMATIC LINK
             % 
-            % link(2).qlim = [-10 10]; % Limits for the PRISMATIC joint
-
-            link(1) = Link([ 0     0.001   0   -pi/2   1]); % PRIMATIC LINK
-
-            link(1).qlim = [-10 10]; % Limits for the PRISMATIC joint from Linear UR5
-
+            % link(1).qlim = [-10 10]; % Limits for the PRISMATIC joint
+            
             self.model = SerialLink(link,'name',self.name);
-
+            
         end
-
-        function moveToTarget(self, targetX, targetY)
-            % Current robot base position
-            currentPose = self.model.fkine(self.model.getpos); % Forward kinematics to get current pose
-
-            % Extract current X, Y position from base transformation matrix
-            currentX = currentPose.t(1);  % Current X position
-            currentY = currentPose.t(2);  % Current Y position
-
-            % Calculate the target angle to rotate towards the target
-            targetAngle = atan2(targetY - currentY, targetX - currentX);
-
-            % Set joint angles for rotation (link 1 is rotational)
-            q1 = targetAngle;  % Set rotation joint angle
-
-            % Calculate the distance to move linearly
-            distance = sqrt((targetX - currentX)^2 + (targetY - currentY)^2);
-
-            % Set joint value for prismatic joint (link 2)
-            q2 = distance;  % Move the prismatic joint to the distance
-
-            % Create joint trajectory for smooth movement
-            steps = 50;  % Number of steps for the movement
-            currentQ = self.model.getpos;  % Get current joint configuration
-            targetQ = [q1, q2];  % Target joint configuration (rotation, linear move)
-
-            % Create a smooth trajectory from the current joint config to the target
-            qTrajectory = jtraj(currentQ, targetQ, steps);
-
-            % Animate the movement
-            for i = 1:steps
-                self.model.animate(qTrajectory(i, :));
-                drawnow;
-                pause(0.01);
-            end
-        end
-
     end
 end
