@@ -104,26 +104,9 @@ classdef A2_main < handle
 
             function testingCartMovement(self)
                 
-                % self.move.cartMove(self.env.carts, 1, self.env.plates, 4, self.steps);
-                % self.env.cartUR3 = YumchaCart(self.env.cartUR3Origin * trotz(pi/2));
-                % self.env.cartUR3.model.animate(0);
-                % drawnow();
-
-                targetPose = transl(-0.5, 0.5, 0);
-
-                currentjoint = self.env.cartUR3.model.getpos;
-
-                joints = self.env.cartUR3.model.ikcon(targetPose, currentjoint);
-
-                q = jtraj(currentjoint, joints, self.steps);
-
-                for j = 1:size(q,1)
-                    self.env.cartUR3.model.animate(q(j,:));
-                    drawnow();
-                    pause(0.01);
-                end
+                pose = transl(1, 0.5, 0);
+                self.move.cartMove(self.env.cartUR3.model, pose, 75);
                 
-                % self.env.cartUR3.moveToTarget(0.8,1);
                 
                 
             end

@@ -59,32 +59,19 @@ classdef Movement < handle
             end
         end
 
-        function cartMove(self, cart, cartIndex, object, objectIndex, steps)
+        function cartMove(self, cart, pose, steps)
             % Moves the cart so that the object is within range of the robotic arm
             % Inputs:
-            % - cart: Cart/vechicle robotic arm is on
-            % - cartIndex: Which cart/vechicle number
-            % - object: The object the robot arm wants to pickup/move
-            % - objectIndex: The specific object number that the robot arm wants to pickup/move
+            % - cart: Desired Cart
+            % - pose: Desired Position to get to
             % - Steps: How smooth you want the animation to be, higher is smoother
-
-            cartPose = cart.model{cartIndex}.base.T;
-
-            objectPose = object.model{objectIndex}.base.T;
-
-            % the range the cart needs to stop within robot arms reach
-            offsetDistance = 0.1;
-
-            % Calculate the target position for the cart z value should not change
-            targetCartPosition = transl(objectPose(1,4), objectPose(2,4), cartPose(3,4));
-
-            % rotation of the cart should be automatic, similar to a revolute link
-            targetCartPose = targetCartPosition * trotz(pi/2);
             
-            q = jtraj(cartPose, targetCartPose, steps);
+            joints = cart.ikcon(pose, cart.getpos);
+
+            q = jtraj(cart.getpos, joints, steps);
 
             for j = 1:size(q,1)
-                cart.model{cartIndex}.animate(q(j,:));
+                cart.animate(q(j,:));
                 drawnow();
                 pause(0.01);
             end

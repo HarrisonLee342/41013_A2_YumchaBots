@@ -40,3 +40,4 @@ one prismatic and one revolute to allow for the cart to rotate and move?
 - might need to adjust scale of objects
 - trying to get cart to move on its own, however i won't trying prismatic link / link ply files but
 running into issues
+- need self nagivation, localisation etc for cart
