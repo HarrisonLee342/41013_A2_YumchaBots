@@ -95,41 +95,41 @@ classdef Environment < handle
             % Round table (dia = 1.01167, r = 0.5 height = 0.3225) placed at [0, 0, 0.01]
             PlaceObject('table.ply',[0,0,0.01]);
             
-            % % Chairs
-            % % PlaceObject('chair.ply', [0, 0.45, 0.01]);
-            % self.numChairs = 8;
-            % self.chairsInitial = self.calcPose(0.45, 0.01, [0,0,0], self.numChairs);
-            % self.chairs = Objects('chair', self.numChairs);
-            % for i = 1:self.numChairs
-            %     self.chairs.model{i}.base = self.chairsInitial{i};
-            %     self.chairs.model{i}.animate(0);
-            %     drawnow();
-            %     pause(0.01);
-            % end
-            % 
-            % % Plate (Radius = 0.079)
-            % % PlaceObject('plate.ply', [0, 0.4, 0.325]);
-            % self.numPlates = 8;
-            % self.platesInitial = self.calcPose(0.4, 0, [0,0,0.325], self.numPlates);
-            % self.plates = Objects('plate', self.numPlates);
-            % for i = 1:self.numPlates
-            %     self.plates.model{i}.base = self.platesInitial{i};
-            %     self.plates.model{i}.animate(0);
-            %     drawnow();
-            %     pause(0.01);
-            % end
-            % 
-            % % Dumpling tray (Radius = 0.055m, height = 0.035m)
-            % % PlaceObject('dumpling_tray.ply', [0, 0.2, 0.33]);
-            % self.numDumplings = 6;
-            % self.dumplingsInitial = self.calcPose(0.2, 0.01, [0,0,0.32], self.numDumplings);
-            % self.dumplings = Objects('dumpling', self.numDumplings);
-            % for i = 1:self.numDumplings
-            %     self.dumplings.model{i}.base = self.dumplingsInitial{i};
-            %     self.dumplings.model{i}.animate(0);
-            %     drawnow();
-            %     pause(0.01);
-            % end
+            % Chairs
+            % PlaceObject('chair.ply', [0, 0.45, 0.01]);
+            self.numChairs = 8;
+            self.chairsInitial = self.calcPose(0.45, 0.01, [0,0,0], self.numChairs);
+            self.chairs = Objects('chair', self.numChairs);
+            for i = 1:self.numChairs
+                self.chairs.model{i}.base = self.chairsInitial{i};
+                self.chairs.model{i}.animate(0);
+                drawnow();
+                pause(0.01);
+            end
+
+            % Plate (Radius = 0.079)
+            % PlaceObject('plate.ply', [0, 0.4, 0.325]);
+            self.numPlates = 8;
+            self.platesInitial = self.calcPose(0.4, 0, [0,0,0.325], self.numPlates);
+            self.plates = Objects('plate', self.numPlates);
+            for i = 1:self.numPlates
+                self.plates.model{i}.base = self.platesInitial{i};
+                self.plates.model{i}.animate(0);
+                drawnow();
+                pause(0.01);
+            end
+
+            % Dumpling tray (Radius = 0.055m, height = 0.035m)
+            % PlaceObject('dumpling_tray.ply', [0, 0.2, 0.33]);
+            self.numDumplings = 6;
+            self.dumplingsInitial = self.calcPose(0.2, 0.01, [0,0,0.32], self.numDumplings);
+            self.dumplings = Objects('dumpling', self.numDumplings);
+            for i = 1:self.numDumplings
+                self.dumplings.model{i}.base = self.dumplingsInitial{i};
+                self.dumplings.model{i}.animate(0);
+                drawnow();
+                pause(0.01);
+            end
 
             % cart (lenght = 0.448, width = 0.225, height = 0.381)
             % height for arm is 0.344
@@ -141,14 +141,13 @@ classdef Environment < handle
             self.cartKUKAOrigin = transl(self.cartsInitial(2,:));
             self.cartKUKA = YumchaCart(self.cartKUKAOrigin);
 
-            % % Placing UR3 robotic arm ontop of the cart
-            % self.ur3Origin = self.cartUR3.model.base.T * transl(0,0,0.35);
-            % self.ur3Origin = self.cartUR3.model.fkine(self.cartUR3.model.getpos).T * transl(0,-0.35,0) * trotx(pi/2);
-            % self.ur3 = UR3Modified(self.ur3Origin);
+            % Placing UR3 robotic arm ontop of the cart
+            self.ur3Origin = self.cartUR3.model.base.T * transl(0,0,0.35);
+            self.ur3 = UR3Modified(self.ur3Origin);
 
-            % % Placing KUKA robotic arm ontop of the cart
-            % self.kukaOrigin = self.carts.model{2}.base.T * transl(0,0,0.35);
-            % self.kuka = KUKA_K6(self.kukaOrigin);
+            % Placing KUKA robotic arm ontop of the cart
+            self.kukaOrigin = self.cartKUKA.model.base.T * transl(0,0,0.35);
+            self.kuka = KUKA_K6(self.kukaOrigin);
 
             % % testing gripper
             % self.testgripper = LinearUR3eGripper(transl(0,0,0.5));

@@ -98,8 +98,7 @@ classdef A2_main < handle
                     self.env.plates.model{1}.base = self.env.carts.model{1}.base.T * transl(0,0,0.075);
                     self.env.plates.model{1}.animate(0)
                 end
-               
-
+              
             end
 
             function testingCartMovement(self)
