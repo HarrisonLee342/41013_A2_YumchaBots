@@ -1,6 +1,6 @@
 classdef Objects < handle
     %   MULTIPLE OBJECTS created by Harrison Lee - 13935857
-    %   A class that creates a group of objects (dish, dumplings, cart)
+    %   A class that creates a group of objects (dish, dumplings, chair)
     %   Based off the files RobotCow.m and RobotBaseClass.m
 
     %#ok<*TRYNC>
@@ -88,12 +88,6 @@ classdef Objects < handle
 
                 case 'chair'
                     [faceData,vertexData,plyData] = plyread('chair.ply','tri');
-
-                % cart (lenght = 0.448, width = 0.225, height = 0.381)
-                % height for arm is 0.344
-                % height for plate/dishes is 0.075
-                case 'cart'
-                    [faceData,vertexData,plyData] = plyread('cart.ply','tri');
 
                 otherwise
                     error('Unknown object type: %s', [objectType, num2str(num)]);

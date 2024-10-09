@@ -137,9 +137,7 @@ classdef Environment < handle
             % PlaceObject('cart.ply', [0.65, 0, 0]);
             self.cartUR3Origin = transl(self.cartsInitial(1,:));
             self.cartUR3 = YumchaCart(self.cartUR3Origin);
-
-            self.cartKUKAOrigin = transl(self.cartsInitial(2,:));
-            self.cartKUKA = YumchaCart(self.cartKUKAOrigin);
+            self.cartKUKA = YumchaCart(transl(self.cartsInitial(2,:)));
 
             % % Placing UR3 robotic arm ontop of the cart
             % self.ur3Origin = self.cartUR3.model.base.T * transl(0,0,0.35);
