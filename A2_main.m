@@ -165,6 +165,15 @@ classdef A2_main < handle
                     disp('Movement Folder already loaded.');
                 end
 
+                % Collision class
+                if ~contains(path, 'Collison')
+                    addpath('Collision');
+                    disp('Collision Folder loaded.');
+                else
+                    disp('Collision Folder already loaded.');
+                end
+
+
             end
 
             % Reloading folder paths for debugging
@@ -184,6 +193,9 @@ classdef A2_main < handle
 
                 % Movement class
                 addpath('Movement');
+
+                % Collision class
+                addpath('Collision');
 
             end
         end
