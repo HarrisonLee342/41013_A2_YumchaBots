@@ -45,7 +45,10 @@ classdef Environment < handle
         numDumplings;
         dumplingsInitial;
 
-        carts;
+        cartUR3;
+        cartUR3Origin;
+        cartKUKA;
+        cartKUKAOrigin;
         numCarts;
         % CartsInitial;
 
@@ -98,8 +101,8 @@ classdef Environment < handle
             self.chairsInitial = self.calcPose(0.45, 0.01, [0,0,0], self.numChairs);
             self.chairs = Objects('chair', self.numChairs);
             for i = 1:self.numChairs
-                self.chairs.objectModel{i}.base = self.chairsInitial{i};
-                self.chairs.objectModel{i}.animate(0);
+                self.chairs.model{i}.base = self.chairsInitial{i};
+                self.chairs.model{i}.animate(0);
                 drawnow();
                 pause(0.01);
             end
@@ -110,8 +113,8 @@ classdef Environment < handle
             self.platesInitial = self.calcPose(0.4, 0, [0,0,0.325], self.numPlates);
             self.plates = Objects('plate', self.numPlates);
             for i = 1:self.numPlates
-                self.plates.objectModel{i}.base = self.platesInitial{i};
-                self.plates.objectModel{i}.animate(0);
+                self.plates.model{i}.base = self.platesInitial{i};
+                self.plates.model{i}.animate(0);
                 drawnow();
                 pause(0.01);
             end
@@ -122,8 +125,8 @@ classdef Environment < handle
             self.dumplingsInitial = self.calcPose(0.2, 0.01, [0,0,0.32], self.numDumplings);
             self.dumplings = Objects('dumpling', self.numDumplings);
             for i = 1:self.numDumplings
-                self.dumplings.objectModel{i}.base = self.dumplingsInitial{i};
-                self.dumplings.objectModel{i}.animate(0);
+                self.dumplings.model{i}.base = self.dumplingsInitial{i};
+                self.dumplings.model{i}.animate(0);
                 drawnow();
                 pause(0.01);
             end
@@ -132,19 +135,18 @@ classdef Environment < handle
             % height for arm is 0.344
             % height for plate/dishes is 0.075
             % PlaceObject('cart.ply', [0.65, 0, 0]);
-            self.numCarts = 2;
-            self.carts = Objects('cart', self.numCarts);
-            for i = 1:self.numCarts
-                self.carts.objectModel{i}.base = SE3(self.cartsInitial(i,:)).T;
-                self.carts.objectModel{i}.animate(0);
-                drawnow();
-                pause(0.01);
-            end
+            self.cartUR3Origin = transl(self.cartsInitial(1,:));
+            self.cartUR3 = YumchaCart(self.cartUR3Origin);
 
-            self.ur3Origin = self.carts.objectModel{1}.base.T * transl(0,0,0.35);
+            self.cartKUKAOrigin = transl(self.cartsInitial(2,:));
+            self.cartKUKA = YumchaCart(self.cartKUKAOrigin);
+
+            % Placing UR3 robotic arm ontop of the cart
+            self.ur3Origin = self.cartUR3.model.base.T * transl(0,0,0.35);
             self.ur3 = UR3Modified(self.ur3Origin);
 
-            self.kukaOrigin = self.carts.objectModel{2}.base.T * transl(0,0,0.35);
+            % Placing KUKA robotic arm ontop of the cart
+            self.kukaOrigin = self.cartKUKA.model.base.T * transl(0,0,0.35);
             self.kuka = KUKA_K6(self.kukaOrigin);
 
             % % testing gripper

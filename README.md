@@ -8,6 +8,7 @@
 
 **Files:** <br>
 This repository utilises Peter Corke's Robotics Toolbox Modified by UTS<br>
+Before running A2_main, run rvctools modified by UTS: https://canvas.uts.edu.au/courses/31794/files/8018863?wrap=1 <br>
 
 ## Project description <br>
 Automated Yumcha services, Yumacha Bots will use 2 robotic arms to service and deliver fresh dumpling dishes to the customers. The robotic arms will travel on carts, one arm travelling to place empty plates and chopsticks for the customers to use and another robot travelling and placing requested dishes onto the table. <be>
@@ -37,3 +38,6 @@ Automated Yumcha services, Yumacha Bots will use 2 robotic arms to service and d
 one prismatic and one revolute to allow for the cart to rotate and move? 
 (z axis rotation - wheels) (z-axis translocation for kart)?
 - might need to adjust scale of objects
+- trying to get cart to move on its own, however i won't trying prismatic link / link ply files but
+running into issues
+- need self nagivation, localisation etc for cart

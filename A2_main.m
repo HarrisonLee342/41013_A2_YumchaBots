@@ -40,7 +40,8 @@ classdef A2_main < handle
 
                 switch input_val
                     case 't'
-                        self.test();
+                        self.testingCartMovement();
+                        % self.testingArmMovement();
 
                     case '0'
                         disp('Exiting...');
@@ -52,6 +53,7 @@ classdef A2_main < handle
         end
     end
 
+<<<<<<< HEAD
     methods
         function test(self)
 
@@ -60,6 +62,22 @@ classdef A2_main < handle
             %     platePose = self.env.platesInitial{i} * trotx(pi) * transl(0,0,-0.14);
             %     self.move.objectMovement(platePose, self.env.ur3.model, self.steps);
             % end
+=======
+        methods
+            function testingArmMovement(self)
+
+                % % UR3 to plate Movement
+                % for i = 1:size(self.env.platesInitial,2)
+                %     platePose = self.env.platesInitial{i} * trotx(pi) * transl(0,0,-0.14);
+                %     self.move.armMove(platePose, self.env.ur3.model, self.steps);
+                % end
+                
+                % % KUKA to dumpling tray Movement
+                % for i= 1:size(self.env.dumplingsInitial,2)
+                %     dumplingPose = self.env.dumplingsInitial{i} * trotx(pi) * transl(0,0,-0.14);
+                %     self.move.armMove(dumplingPose, self.env.kuka.model, self.steps);
+                % end
+>>>>>>> 4d829568f178ce6037dfa6d3df939e2555a9eb46
 
             % % KUKA to dumpling tray Movement
             % for i= 1:size(self.env.dumplingsInitial,2)
@@ -73,6 +91,7 @@ classdef A2_main < handle
             % % KUKA Range plot
             % self.env.RangePlot(self.env.kuka.model);
 
+<<<<<<< HEAD
             %% TESTING
 
             % for i = 1:size(self.env.platesInitial,2)
@@ -90,6 +109,44 @@ classdef A2_main < handle
                 disp('Collision detected!');
             else
                 disp('No collision detected.');
+=======
+                % dumplingPose = self.env.dumplingsInitial{4} * trotx(pi) * transl(0,0,-0.14);
+                % self.move.armMove(dumplingPose, self.env.kuka.model, self.steps);
+                % 
+                % disp('end effector')
+                % disp(self.env.kuka.model.fkine(self.env.kuka.model.getpos).T)
+                % 
+                % for i = 1:size(self.env.dumplingsInitial,2)
+                %     fprintf('Dumpling no: %d \n',i);
+                %     disp(self.env.dumplingsInitial{i});
+                % end
+                % disp(size(self.env.dumplingsInitial));
+
+                % Moving arm to plate, then moving plate to inside the cart
+                for i = 1:size(self.env.platesInitial,2)
+                    for j = 1:size(self.env.platesInitial,2)
+                        platePose = self.env.platesInitial{j} * trotx(pi) * transl(0,0,0.02);
+                        self.move.armMove(platePose, self.env.ur3.model, self.steps);
+                    end
+
+                    for k = 1:size(self.env.platesInitial,2)
+                        platePose = self.env.carts.model{1}.base.T * transl(0,0,0.075) * trotx(pi);
+                        self.move.objectMove(platePose, self.env.ur3.model, self.steps, self.env.plates, 1);
+                    end
+                    self.env.plates.model{1}.base = self.env.carts.model{1}.base.T * transl(0,0,0.075);
+                    self.env.plates.model{1}.animate(0)
+                end
+              
+            end
+
+            function testingCartMovement(self)
+                
+                pose = transl(1, 0.5, 0);
+                self.move.cartMove(self.env.cartUR3.model, pose, 75);
+                
+                
+                
+>>>>>>> 4d829568f178ce6037dfa6d3df939e2555a9eb46
             end
         
 
@@ -115,6 +172,76 @@ classdef A2_main < handle
         %     self.move.objectMovement(platePose, self.env.kuka.model, self.steps);
         % end
 
+<<<<<<< HEAD
+=======
+        methods(Static)
+
+            % Loading necessary file paths / toolbox
+            function loadFiles()
+
+                % Robot classes
+                if ~contains(path, 'RobotClasses')
+                    addpath('RobotClasses');
+                    disp('RobotClasses Folder loaded.');
+                else
+                    disp('RobotClasses Folder already loaded.');
+                end
+
+                % Environment Class
+                if ~contains(path, 'Environment')
+                    addpath('Environment');
+                    disp('Environment Folder loaded.');
+                else
+                    disp('Environment Folder already loaded.');
+                end
+
+                % Ply files folder
+                if ~contains(path, 'plyFiles')
+                    addpath('plyFiles');
+                    disp('Ply files folder loaded.');
+                else
+                    disp('Ply files folder already loaded.');
+                end
+
+                % Object class
+                if ~contains(path, 'Objects')
+                    addpath('Objects');
+                    disp('Object Folder loaded.');
+                else
+                    disp('Object Folder already loaded.');
+                end
+
+                % Movement class
+                if ~contains(path, 'Movement')
+                    addpath('Movement');
+                    disp('Movement Folder loaded.');
+                else
+                    disp('Movement Folder already loaded.');
+                end
+
+            end
+
+            % Reloading folder paths for debugging
+            function reloadFiles()
+
+                % Evironment
+                addpath('Environment');
+
+                % Ply files folder
+                addpath('plyFiles');
+
+                % Object class
+                addpath('Objects');
+
+                % Robot Classes
+                addpath('RobotClasses');
+
+                % Movement class
+                addpath('Movement');
+
+            end
+        end
+>>>>>>> 4d829568f178ce6037dfa6d3df939e2555a9eb46
     end
 
     % Sets variables with classes
