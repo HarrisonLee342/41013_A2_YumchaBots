@@ -53,7 +53,7 @@ classdef A2_main < handle
         end
     end
 
-<<<<<<< HEAD
+
     methods
         function test(self)
 
@@ -62,7 +62,7 @@ classdef A2_main < handle
             %     platePose = self.env.platesInitial{i} * trotx(pi) * transl(0,0,-0.14);
             %     self.move.objectMovement(platePose, self.env.ur3.model, self.steps);
             % end
-=======
+
         methods
             function testingArmMovement(self)
 
@@ -77,7 +77,7 @@ classdef A2_main < handle
                 %     dumplingPose = self.env.dumplingsInitial{i} * trotx(pi) * transl(0,0,-0.14);
                 %     self.move.armMove(dumplingPose, self.env.kuka.model, self.steps);
                 % end
->>>>>>> 4d829568f178ce6037dfa6d3df939e2555a9eb46
+
 
             % % KUKA to dumpling tray Movement
             % for i= 1:size(self.env.dumplingsInitial,2)
@@ -91,7 +91,7 @@ classdef A2_main < handle
             % % KUKA Range plot
             % self.env.RangePlot(self.env.kuka.model);
 
-<<<<<<< HEAD
+
             %% TESTING
 
             % for i = 1:size(self.env.platesInitial,2)
@@ -109,7 +109,7 @@ classdef A2_main < handle
                 disp('Collision detected!');
             else
                 disp('No collision detected.');
-=======
+
                 % dumplingPose = self.env.dumplingsInitial{4} * trotx(pi) * transl(0,0,-0.14);
                 % self.move.armMove(dumplingPose, self.env.kuka.model, self.steps);
                 % 
@@ -146,7 +146,7 @@ classdef A2_main < handle
                 
                 
                 
->>>>>>> 4d829568f178ce6037dfa6d3df939e2555a9eb46
+
             end
         
 
@@ -172,8 +172,6 @@ classdef A2_main < handle
         %     self.move.objectMovement(platePose, self.env.kuka.model, self.steps);
         % end
 
-<<<<<<< HEAD
-=======
         methods(Static)
 
             % Loading necessary file paths / toolbox
@@ -241,7 +239,7 @@ classdef A2_main < handle
 
             end
         end
->>>>>>> 4d829568f178ce6037dfa6d3df939e2555a9eb46
+
     end
 
     % Sets variables with classes
