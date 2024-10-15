@@ -105,9 +105,7 @@ classdef A2_main < handle
                 
                 pose = transl(1, 0.5, 0);
                 self.move.cartMove(self.env.cartUR3.model, pose, 75);
-                
-                
-                
+         
             end
 
             % Sets variables with classes
