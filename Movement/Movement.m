@@ -1,4 +1,5 @@
 classdef Movement < handle
+    % Class created by Harrison Lee - 13935857
 
     properties(Constant)
         %% Constant variables
@@ -7,37 +8,34 @@ classdef Movement < handle
 
     properties
         %% Changing variables
-        
+
+        % Final/initial position
+        % pose;
         % Testing
-        
+
 
     end
 
     methods
-        function self = Movement()
-            
-        end
-    end
+        function armMove(self, pose, arm, steps)
+            % Moves the robotic arm to the desired position
+            % Inputs:
+            % - Pose: Selected position in transl format
+            % - Arm: Robotic arm model (self.env.kuka.model or self.env.ur3.model)
+            % - Steps: How smooth you want the animation to be, higher is smoother
 
-    methods
-        function objectMovement(self)
-            % Robotic arm does move
-            for i = 1:size(self.Env.platesInitial,1)
-                brickPose = transl(self.Env.platesInitial(i,:)) * trotx(pi) * transl(0,0,-0.14);
+            joints = arm.ikcon(pose, arm.getpos);
 
-                brickJoints = self.Env.ur3.model.ikcon(brickPose,self.Env.ur3.model.getpos);
-
-                qBrickInitial = jtraj(self.Env.ur3.model.getpos,brickJoints,50);
-                for j = 1:size(qBrickInitial,1)
-                    self.Env.ur3.model.animate(qBrickInitial(j,:));
-                    drawnow();
-                    pause(0.01);
-                end
+            q = jtraj(arm.getpos,joints, steps);
+            for j = 1:size(q,1)
+                arm.animate(q(j,:));
+                drawnow();
+                pause(0.01);
+                
             end
-            % Gripper does load in this way after the folder path is added
-            self.gripper = LinearUR3eGripper(transl(0,0,0.33));
         end
 
+<<<<<<< HEAD
         
         function trapezoidalMovement(self, startPose, endPose, T_total)
 
@@ -59,10 +57,48 @@ classdef Movement < handle
         end 
         % Sets variables with classes
         function setClassVariables(self)
+=======
+        function objectMove(self, pose, arm, steps, object, objectIndex)
+            % Moves the robotic arm to the desired position
+            % Inputs:
+            % - Pose: Selected position in transl format
+            % - Arm: Robotic arm model (self.env.kuka.model or self.env.ur3.model)
+            % - Steps: How smooth you want the animation to be, higher is smoother
+            % - Object: Object the robotic arm is holding
+>>>>>>> 4d829568f178ce6037dfa6d3df939e2555a9eb46
 
-            %Environment Class
-            self.Env = Environment();
+            joints = arm.ikcon(pose, arm.getpos);
 
+            q = jtraj(arm.getpos,joints, steps);
+            for j = 1:size(q,1)
+                arm.animate(q(j,:));
+
+                objectGripPose = arm.fkine(arm.getpos).T * transl(0, 0, 0.02);
+                object.model{objectIndex}.base = objectGripPose;
+                object.model{objectIndex}.animate(0);
+                
+                drawnow();
+                pause(0.01);
+                
+            end
+        end
+
+        function cartMove(self, cart, pose, steps)
+            % Moves the cart so that the object is within range of the robotic arm
+            % Inputs:
+            % - cart: Desired Cart
+            % - pose: Desired Position to get to
+            % - Steps: How smooth you want the animation to be, higher is smoother
+            
+            joints = cart.ikcon(pose, cart.getpos);
+
+            q = jtraj(cart.getpos, joints, steps);
+
+            for j = 1:size(q,1)
+                cart.animate(q(j,:));
+                drawnow();
+                pause(0.01);
+            end
         end
     end
 end
