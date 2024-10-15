@@ -38,6 +38,25 @@ classdef Movement < handle
             self.gripper = LinearUR3eGripper(transl(0,0,0.33));
         end
 
+        
+        function trapezoidalMovement(self, startPose, endPose, T_total)
+
+            numSteps = 100;  % Adjust accordingly  
+            t = linspace(0, T_total, numSteps);  % Time vector for lspb function
+            qMatrix = zeros(numSteps, length(startPose)); 
+
+            for i = 1:length(startPose)
+                qMatrix(:, i) = lspb(startPose(i), endPose(i), t);
+            end
+ 
+            % Animate the movement based on the generated joint trajectories
+            for i = 1:numSteps
+                self.Env.ur3.model.animate(qMatrix(i, :));  
+                drawnow();
+                pause(0.01); 
+            end
+
+        end 
         % Sets variables with classes
         function setClassVariables(self)
 
