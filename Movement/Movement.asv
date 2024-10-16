@@ -35,31 +35,15 @@ classdef Movement < handle
             end
         end
 
-        function trapezoidalMovement(self, arm, startPose, endPose, t_total)
+        function trapezoidalMovement(self, startPose, endPose, t_total)
             
-           steps = 100;
-           t = linspace(0, t_total, steps); % Time vector for LSPB 
+           t = linspace(0, 1, steps); % Time vector for LSPB 
 
-           qMatrix = nan(steps, length(startPose)); 
-
-           % Generate trapezoidal trajectory from start to end pose over t
-           for i = 1:length(startPose)
-
-               qMatrix(:, i) = lspb(startPose(i), endPose(i), t);  % Interpolated joint configuration
-
-           end
-
-           % Animate the robotic arm movement
-           for j = 1:steps
-                % Animate the arm using the current joint configuration
-                arm.animate(qMatrix(j, :));
-                
-                % Update the figure to reflect the changes in real-time
-                drawnow();
-                
-                % Pause to control animation speed (syncs with the total time)
-                pause(t_total / steps);
-           end
+           qMatrix = nan(steps, 6); 
+           
+           for i = 1:steps
+               qMatrix(i, :) = lspb(startPose(i), endPose(i), t);  % Interpolated joint configuration
+            end
         
         end
 
