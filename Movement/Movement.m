@@ -36,7 +36,13 @@ classdef Movement < handle
         end
 
         function trapezoidalMovement(self, arm, startPose, endPose, t_total)
-            
+           % Moves the robotic arm to desired position using trapezoidal projection
+           % Inputs: 
+           % - arm: The robotic arm model (self.env.kuka.model or self.env.ur3.model)
+           % - startPose: The starting joint configuration (vector of joint angles)
+           % - endPose: The desired joint configuration (vector of joint angles)
+           % - t_total: Total time for the movement (in seconds) 
+
            steps = 100;
            t = linspace(0, t_total, steps); % Time vector for LSPB 
 
