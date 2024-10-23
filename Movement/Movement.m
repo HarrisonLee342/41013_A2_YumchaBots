@@ -49,7 +49,7 @@ classdef Movement < handle
             for j = 1:size(q,1)
                 arm.animate(q(j,:));
 
-                objectGripPose = arm.fkine(arm.getpos).T * transl(0, 0, 0.02);
+                objectGripPose = arm.fkine(arm.getpos).T * trotx(pi) * transl(0, 0, -0.14);
                 object.model{objectIndex}.base = objectGripPose;
                 object.model{objectIndex}.animate(0);
                 
@@ -59,7 +59,7 @@ classdef Movement < handle
             end
         end
 
-        function cartMove(self, cart, pose, steps)
+        function cartMove(self, cart, pose, object, objectnum, offset, steps)
             % Moves the cart so that the object is within range of the robotic arm
             % Inputs:
             % - cart: Desired Cart
@@ -74,7 +74,39 @@ classdef Movement < handle
                 cart.animate(q(j,:));
                 drawnow();
                 pause(0.01);
+
+                for i = 1:objectnum
+                    height = 0.075 + (offset * i);
+                    object{i}.base = cart.fkine(cart.getpos).T * transl(0, 0, height);
+                    object{i}.animate(0);
+                    drawnow();
+                    pause(0.01);
+                end
             end
+            
+            % function cartMove(self, cart, pose, steps)
+            % % Moves the cart so that the object is within range of the robotic arm
+            % % Inputs:
+            % % - cart: Desired Cart
+            % % - pose: Desired Position to get to
+            % % - Steps: How smooth you want the animation to be, higher is smoother
+            % 
+            % joints = cart.ikcon(pose, cart.getpos);
+            % 
+            % q = jtraj(cart.getpos, joints, steps);
+            % 
+            % for j = 1:size(q,1)
+            %     cart.animate(q(j,:));
+            %     drawnow();
+            %     pause(0.01);
+            % 
+            %     for i = 1:self.numPlates
+            %             self.plates.model{i}.base = self.platesInitial{i};
+            %             self.plates.model{i}.animate(0);
+            %             drawnow();
+            %             pause(0.01);
+            %         end
+            % end
         end
     end
 end
