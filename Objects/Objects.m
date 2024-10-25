@@ -77,12 +77,11 @@ classdef Objects < handle
             name = [objectType, num2str(num)];
 
             switch lower(objectType)
-
                 % Plate (Radius = 0.079)
                 case 'plate'
                     [faceData,vertexData,plyData] = plyread('plate.ply','tri');
 
-                % Dumplings (Radius = 0.055m, height = 0.035m)
+                    % Dumplings (Radius = 0.055m, height = 0.035m)
                 case 'dumpling'
                     [faceData,vertexData,plyData] = plyread('dumpling_tray.ply','tri');
 
@@ -93,6 +92,7 @@ classdef Objects < handle
                     error('Unknown object type: %s', [objectType, num2str(num)]);
             end
 
+            % Create the model
             link = Link('alpha',0,'a',0,'d',0,'offset',0);
             model = SerialLink(link,'name', name);
 
@@ -104,16 +104,28 @@ classdef Objects < handle
 
             model.plot3d(zeros(1,model.n),'noarrow','workspace',workspace,'view',[-30,30]);
 
-            model.delay =0;
+            model.delay = 0;
 
+            % Find the model in the current figure
             handles = findobj('Tag', model.name);
             h = get(handles,'UserData');
 
-            h.link(1).Children.FaceVertexCData = [plyData.vertex.red ...
-                , plyData.vertex.green ...
-                , plyData.vertex.blue]/255;
-            h.link(1).Children.FaceColor = 'interp';
-            hold on
+            % Check if the PLY file contains vertex color information
+            if isfield(plyData.vertex, 'red') && isfield(plyData.vertex, 'green') && isfield(plyData.vertex, 'blue')
+                disp('Applying vertex color from PLY file.');
+                % Assign vertex color to the model
+                h.link(1).Children.FaceVertexCData = [plyData.vertex.red ...
+                    , plyData.vertex.green ...
+                    , plyData.vertex.blue] / 255;  % Normalize RGB values to 0-1
+                h.link(1).Children.FaceColor = 'interp';  % Use interpolated face colors
+            else
+                disp('PLY file does not contain vertex color. Applying default color.');
+                % Apply a default color if no vertex color is available
+                h.link(1).Children.FaceColor = [0.8, 0.8, 0.8];  % Default to grey color
+            end
+
+            hold on;
         end
+
     end
 end

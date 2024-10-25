@@ -12,6 +12,8 @@ classdef Environment < handle
 
         steps = 50;
 
+        
+
     end
 
     properties
@@ -62,6 +64,8 @@ classdef Environment < handle
         % Testing
         testgripper
 
+        chairMesh; 
+
     end
 
     methods
@@ -93,8 +97,13 @@ classdef Environment < handle
             hold on;
 
             % Round table (dia = 1.01167, r = 0.5 height = 0.3225) placed at [0, 0, 0.01]
-            PlaceObject('table.ply',[0,0,0.01]);
-            
+            % PlaceObject('table.ply',[0,0,0.01]);
+
+            Table = PlaceObject('Rectangle_TableV2.ply',[0,0,-0.260]);
+            verts = [get(Table,'Vertices'), ones(size(get(Table,'Vertices'),1),1)] * trotx(pi);
+            verts(:,1) = verts(:,1) * 1;
+            set(Table,'Vertices',verts(:,1:3))
+
             % Chairs
             % PlaceObject('chair.ply', [0, 0.45, 0.01]);
             self.numChairs = 8;
