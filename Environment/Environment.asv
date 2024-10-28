@@ -74,18 +74,18 @@ classdef Environment < handle
 
     methods
 
-        % % Testing class comment out after use
-        % function self = Environment()
-        %     self.loadEnvironment();
-        %     pause(1);
-        %     while true
-        %         input_val = input('0 to exit: ', 's');
-        %         switch input_val
-        %             case '0'
-        %                 break;
-        %         end
-        %     end
-        % end
+        % Testing class comment out after use
+        function self = Environment()
+            self.loadEnvironment();
+            pause(1);
+            while true
+                input_val = input('0 to exit: ', 's');
+                switch input_val
+                    case '0'
+                        break;
+                end
+            end
+        end
 
         function loadEnvironment(self)
             clf;
@@ -106,7 +106,7 @@ classdef Environment < handle
             % Chairs
             % PlaceObject('chair.ply', [0, 0.45, 0.01]);
             self.numChairs = 3;
-            self.chairsInitial = self.calcSideBySidePose([-0.5,0.6,0.01], 0.5, self.numChairs, 'x');
+            self.chairsInitial = calcSideBySidePose([0.5,, spacing, num, axis);
             self.chairs = Objects('chair', self.numChairs);
             for i = 1:self.numChairs
                 self.chairs.model{i}.base = self.chairsInitial{i};
@@ -118,9 +118,9 @@ classdef Environment < handle
             % Plate (Radius = 0.079)
             % PlaceObject('plate.ply', [0, 0.4, 0.325]);
             self.plateStart = [0, -0.15, 0.31];
-            self.platePlace = [0.5,0.3,0.31];
-            self.numPlates = 3;
-            self.platesFinal = self.calcSideBySidePose([0.5,0,0.31], -0.5, self.numPlates, 'x');
+            self.platePlace = [0,0,0.325];
+            self.numPlates = 8;
+            self.platesFinal = self.calcCirclePose(0.4, 0, self.platePlace, self.numPlates);
             self.platesInitial = self.calcStackedPose(self.plateStart, 0.005, self.numPlates);
             self.plates = Objects('plate', self.numPlates);
             for i = 1:self.numPlates
@@ -133,10 +133,10 @@ classdef Environment < handle
             % Dumpling tray (Radius = 0.055m, height = 0.035m)
             % PlaceObject('dumpling_tray.ply', [0, 0.2, 0.33]);
             self.dumplingStart = [0, -0.45, 0.31];
-            self.dumplingPlace = [-0.5,0.2,0.31];
-            self.numDumplings = 3;
-            self.dumplingsFinal = self.calcSideBySidePose(self.dumplingPlace, 0.5, self.numDumplings, 'x');
-            self.dumplingsInitial = self.calcStackedPose(self.dumplingStart, 0.04, self.numDumplings);
+            self.dumplingPlace = [0,0,0.32];
+            self.numDumplings = 6;
+            self.dumplingsFinal = self.calcCirclePose(0.2, 0.01, self.dumplingPlace, self.numDumplings);
+            self.dumplingsInitial = self.calcStackedPose(self.dumplingStart,0.04, self.numDumplings);
             self.dumplings = Objects('dumpling', self.numDumplings);
             for i = 1:self.numDumplings
                 self.dumplings.model{i}.base = self.dumplingsInitial{i};
@@ -158,6 +158,59 @@ classdef Environment < handle
 
 
 
+        end
+
+        function positions = calcCirclePose(self, distance, height, origin, num)
+            % Calculate evenly spaced positions around a circle (table)
+            % Inputs:
+            % - distance: Radius/distance from the origin
+            % - height: Height at which the object will place offset from origin
+            % - origin: origin point [x, y, z], also the point of rotation
+            % - num: Number of objects to be created
+
+            positions = cell(1, num);
+
+            for i = 1:num
+                % Calculate the angle for each plate (evenly spaced around a circle)
+                theta = (i - 1) * (2 * pi/num); % Divides the circle into equal angles
+
+                % Calculate the X and Y positions based on the angle and distance
+                xPos = origin(1) + distance * cos(theta);  % X-coordinate
+                yPos = origin(2) + distance * sin(theta);  % Y-coordinate
+                zPos = origin(3) + height;                 % Z-coordinate, height is offset
+                
+                angleCorrection = theta - pi/2; % Rotate 180 degrees to face inward
+
+                % Transformation matrix for the plate's position
+                positions{i} = transl(xPos, yPos, zPos) * trotz(angleCorrection);
+            end
+        end
+
+        function positions = calcCartPose(self, pose, distance)
+            % Set the z-axis value to zero for each 4x4 transformation matrix in the input list.
+            % This function modifies the z-coordinate of each position to align with a base plane.
+            %
+            % Inputs:
+            % - pose: A cell array of 4x4 transformation matrices representing the
+            %         positions of objects in 3D space. Each matrix contains rotation
+            %         and translation information.
+            % - distance: the offset distance from the object
+            %
+            % Outputs:
+            % - positions: A cell array of the same size as 'pose', where each matrix
+            %              has its z-coordinate set to 0.
+
+            positions = cell(size(pose));
+
+            for i = 1:length(pose)
+                theta = (i - 1) * (2 * pi/length(pose));
+                
+                currentPose = pose{i};
+                currentPose(1, 4) = currentPose(1, 4) + distance * cos(theta);
+                currentPose(2, 4) = currentPose(2, 4) + distance * sin(theta);
+                currentPose(3, 4) = 0;
+                positions{i} = currentPose;
+            end
         end
 
         function positions = calcStackedPose(self, basePosition, stackHeight, num)
@@ -210,6 +263,7 @@ classdef Environment < handle
             delete(self.chairs);
             delete(self.plates);
             delete(self.dumplings);
+            delete(self.carts);
             
         end
 
