@@ -1,4 +1,4 @@
-classdef UR3Modified < RobotBaseClass
+classdef UR3WithCart < RobotBaseClass
     %% Based off UR3 Universal Robot 3kg payload robot model - Modified by Harrison Lee 13935857
     %
     % WARNING: This model has been created by UTS students in the subject
@@ -9,7 +9,7 @@ classdef UR3Modified < RobotBaseClass
     % Inclusion of cart as a prismatic link?
 
     properties(Access = public)   
-        plyFileNameStem = 'UR3Modified';
+        plyFileNameStem = 'UR3WithCart';
     end
     
     methods
@@ -44,25 +44,30 @@ classdef UR3Modified < RobotBaseClass
             % link(4) = Link('d',0.11235,'a',0,'alpha',pi/2,'qlim',deg2rad([-360 360]),'offset', 0);
             % link(5) = Link('d',0.08535,'a',0,'alpha',-pi/2,'qlim',deg2rad([-360,360]), 'offset',0);
             % link(6) = Link('d',0.0819,'a',0,'alpha',0,'qlim',deg2rad([-360,360]), 'offset', 0);
-            
-            link(1) = Link([0      0.1519   0         pi/2  0]);
-            link(2) = Link([0      0        -0.24365   0    0]);
-            link(3) = Link([0      0        -0.21325   0    0]);
-            link(4) = Link([0      0.11235   0        pi/2  0]);
-            link(5) = Link([0      0.08535   0       -pi/2	0]);
-            link(6) = Link([0      0.0819    0         0    0]);
+            link(1) = Link([0     0.0001   0    pi/2     0]);
+            link(2) = Link([0       0      0   -pi/2     1]); % PRIMATIC LINK
+
+            link(3) = Link([0      0.1519   0         pi/2  0]);
+            link(4) = Link([0      0        -0.24365   0    0]);
+            link(5) = Link([0      0        -0.21325   0    0]);
+            link(6) = Link([0      0.11235   0        pi/2  0]);
+            link(7) = Link([0      0.08535   0       -pi/2	0]);
+            link(8) = Link([0      0.0819    0         0    0]);
 
             % Incorporate joint limits
             link(1).qlim = [-180 180]*pi/180;
-            link(2).qlim = [-180 180]*pi/180;
+            link(2).qlim = [-10 10]; % Limits for the PRISMATIC joint
+
             link(3).qlim = [-180 180]*pi/180;
             link(4).qlim = [-180 180]*pi/180;
-            link(5).qlim = [-180 180]*pi/180;  
-            link(6).qlim = [-360 360]*pi/180;
+            link(5).qlim = [-180 180]*pi/180;
+            link(6).qlim = [-180 180]*pi/180;
+            link(7).qlim = [-180 180]*pi/180;  
+            link(8).qlim = [-360 360]*pi/180;
 
-            link(1).offset = -pi;
-            link(2).offset = -pi/2;
+            link(3).offset = -pi;
             link(4).offset = -pi/2;
+            link(5).offset = -pi/2;
 
             % % Adding a PRISMATIC joint for the first link to represent the linear rail
             % % link(1) = Link([pi     0         0        pi/2  1]); % PRISMATIC Link

@@ -147,7 +147,7 @@ classdef Environment < handle
 
             % Placing UR3 robotic arm ontop of the cart
             self.ur3Origin = transl(0.375,-0.3,0.31);
-            self.ur3 = UR3Modified(self.ur3Origin);
+            self.ur3 = UR3(self.ur3Origin);
 
             % Placing KUKA robotic arm ontop of the cart
             self.kukaOrigin = transl(-0.375,-0.3,0.31);
