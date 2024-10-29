@@ -74,18 +74,18 @@ classdef Environment < handle
 
     methods
 
-        % % Testing class comment out after use
-        % function self = Environment()
-        %     self.loadEnvironment();
-        %     pause(1);
-        %     while true
-        %         input_val = input('0 to exit: ', 's');
-        %         switch input_val
-        %             case '0'
-        %                 break;
-        %         end
-        %     end
-        % end
+        % Testing class comment out after use
+        function self = Environment()
+            self.loadEnvironment();
+            pause(1);
+            while true
+                input_val = input('0 to exit: ', 's');
+                switch input_val
+                    case '0'
+                        break;
+                end
+            end
+        end
 
         function loadEnvironment(self)
             clf;
@@ -117,10 +117,10 @@ classdef Environment < handle
 
             % Plate (Radius = 0.079)
             % PlaceObject('plate.ply', [0, 0.4, 0.325]);
-            self.plateStart = [0, -0.15, 0.31];
-            self.platePlace = [0.5,0.3,0.31];
+            self.plateStart = [0, 0.15, 0.31];
+            self.platePlace = [0.5,0.45,0.31];
             self.numPlates = 3;
-            self.platesFinal = self.calcSideBySidePose([0.5,0,0.31], -0.5, self.numPlates, 'x');
+            self.platesFinal = self.calcSideBySidePose(self.platePlace, -0.5, self.numPlates, 'x');
             self.platesInitial = self.calcStackedPose(self.plateStart, 0.005, self.numPlates);
             self.plates = Objects('plate', self.numPlates);
             for i = 1:self.numPlates
@@ -132,8 +132,8 @@ classdef Environment < handle
 
             % Dumpling tray (Radius = 0.055m, height = 0.035m)
             % PlaceObject('dumpling_tray.ply', [0, 0.2, 0.33]);
-            self.dumplingStart = [0, -0.45, 0.31];
-            self.dumplingPlace = [-0.5,0.2,0.31];
+            self.dumplingStart = [0, -0.15, 0.31];
+            self.dumplingPlace = [-0.5,0.3,0.31];
             self.numDumplings = 3;
             self.dumplingsFinal = self.calcSideBySidePose(self.dumplingPlace, 0.5, self.numDumplings, 'x');
             self.dumplingsInitial = self.calcStackedPose(self.dumplingStart, 0.04, self.numDumplings);
@@ -146,12 +146,18 @@ classdef Environment < handle
             end
 
             % Placing UR3 robotic arm ontop of the cart
-            self.ur3Origin = transl(0.375,-0.3,0.31);
-            self.ur3 = UR3Modified(self.ur3Origin);
+            self.ur3Origin = transl(0.375,0,0.31);
+            self.ur3 = UR3(self.ur3Origin);
 
             % Placing KUKA robotic arm ontop of the cart
-            self.kukaOrigin = transl(-0.375,-0.3,0.31);
+            self.kukaOrigin = transl(-0.375,0,0.31);
             self.kuka = KUKA_K6(self.kukaOrigin);
+
+            % Emergency stop button from UTS Toolbox
+            PlaceObject('emergencyStopWallMounted.ply', [-0.75,0.6,0.2]);
+
+            % Fire Extinguisher from UTS Toolbox
+            PlaceObject('fireExtinguisher.ply', [-1,-1,0.01]);
 
             % % testing gripper
             % self.testgripper = LinearUR3eGripper(transl(0,0,0.5));
