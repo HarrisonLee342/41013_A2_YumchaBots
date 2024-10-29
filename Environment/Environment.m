@@ -74,18 +74,18 @@ classdef Environment < handle
 
     methods
 
-        % % Testing class comment out after use
-        % function self = Environment()
-        %     self.loadEnvironment();
-        %     pause(1);
-        %     while true
-        %         input_val = input('0 to exit: ', 's');
-        %         switch input_val
-        %             case '0'
-        %                 break;
-        %         end
-        %     end
-        % end
+        % Testing class comment out after use
+        function self = Environment()
+            self.loadEnvironment();
+            pause(1);
+            while true
+                input_val = input('0 to exit: ', 's');
+                switch input_val
+                    case '0'
+                        break;
+                end
+            end
+        end
 
         function loadEnvironment(self)
             clf;
@@ -152,6 +152,12 @@ classdef Environment < handle
             % Placing KUKA robotic arm ontop of the cart
             self.kukaOrigin = transl(-0.375,0,0.31);
             self.kuka = KUKA_K6(self.kukaOrigin);
+
+            % Emergency stop button from UTS Toolbox
+            PlaceObject('emergencyStopWallMounted.ply', [-0.75,0.6,0.2]);
+
+            % Fire Extinguisher from UTS Toolbox
+            PlaceObject('fireExtinguisher.ply', [-1,-1,0.01]);
 
             % % testing gripper
             % self.testgripper = LinearUR3eGripper(transl(0,0,0.5));
