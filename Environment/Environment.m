@@ -74,18 +74,18 @@ classdef Environment < handle
 
     methods
 
-        % Testing class comment out after use
-        function self = Environment()
-            self.loadEnvironment();
-            pause(1);
-            while true
-                input_val = input('0 to exit: ', 's');
-                switch input_val
-                    case '0'
-                        break;
-                end
-            end
-        end
+        % % Testing class comment out after use
+        % function self = Environment()
+        %     self.loadEnvironment();
+        %     pause(1);
+        %     while true
+        %         input_val = input('0 to exit: ', 's');
+        %         switch input_val
+        %             case '0'
+        %                 break;
+        %         end
+        %     end
+        % end
 
         function loadEnvironment(self)
             clf;

@@ -8,7 +8,6 @@ classdef Movement < handle
 
     properties
         %% Changing variables
-        pointCloud;
         % Final/initial position
         % pose;
         % Testing
@@ -17,6 +16,90 @@ classdef Movement < handle
     end
 
     methods
+
+        % function placeFood(self)
+        %     % DUMPLINGS
+        %     for i= 1:size(self.env.dumplingsInitial,2)
+        %         dumplingPose = self.env.dumplingsInitial{i} * trotx(pi) * transl(0,0,0);
+        %         dumplingFinalPose = self.env.dumplingsFinal{i} * trotx(pi) * transl(0,0,0);
+        % 
+        %         kukaPose = [-0.375;0;0.31];
+        % 
+        %         kukaDist = norm(kukaPose(1:3) - dumplingFinalPose(1:3, 4));
+        % 
+        %         if kukaDist < 0.7
+        %             arm = self.env.kuka.model;
+        %         else
+        %             arm = self.env.ur3.model;
+        %         end
+        % 
+        %         self.move.armMove(dumplingPose, arm, self.steps);
+        % 
+        % 
+        %         self.move.objectMove(dumplingFinalPose, arm, self.steps, self.env.dumplings, i, [0,0,0]);
+        % 
+        %         self.env.dumplings.model{i}.base = self.env.dumplingsFinal{i};
+        %         self.env.dumplings.model{i}.animate(0);
+        %         pause(0.1);
+        %     end
+        % end
+        % 
+        % function placePlates(self)
+        %     for i= 1:size(self.env.platesInitial,2)
+        %         platePose = self.env.platesInitial{i} * trotx(pi) * transl(0,0,0);
+        %         plateFinalPose = self.env.platesFinal{i} * trotx(pi) * transl(0,0,0);
+        % 
+        %         ur3Pose = [0.375;0;0.31];
+        % 
+        %         ur3Dist = norm(ur3Pose(1:3) - plateFinalPose(1:3, 4));
+        % 
+        %         if ur3Dist < 0.6
+        %             arm = self.env.ur3.model;
+        %         else
+        %             arm = self.env.kuka.model;
+        %         end
+        % 
+        %         self.move.armMove(platePose, arm, self.steps);
+        % 
+        %         self.move.objectMove(plateFinalPose, arm, self.steps, self.env.plates, i, [0,0,0]);
+        % 
+        %         self.env.plates.model{i}.base = self.env.platesFinal{i};
+        %         self.env.plates.model{i}.animate(0);
+        %         pause(0.1);
+        %     end
+        % end
+
+        % function armMoveCol(self, pose, arm, steps, tableHeight)
+        %     % Moves the robotic arm to the desired position with collision checking
+        %     % Inputs:
+        %     % - Pose: Target position in transl format
+        %     % - Arm: Robotic arm model (self.env.kuka.model or self.env.ur3.model)
+        %     % - Steps: Number of steps for smoother animation
+        %     % - tableHeight: Height of the table to check for collisions
+        %     % - bufferDistance: Extra distance above the table to avoid collision
+        % 
+        %     joints = arm.ikcon(pose, arm.getpos);
+        %     q = jtraj(arm.getpos, joints, steps);
+        % 
+        %     for j = 1:size(q,1)
+        %         % Update the arm's configuration to the current step's joint positions
+        %         arm.animate(q(j,:));
+        %         drawnow();
+        %         pause(0.01);
+        % 
+        %         % Collision check at the current position
+        %         for linkIdx = 3:arm.n
+        %             linkPose = arm.A(1:linkIdx, q(j,:)).T; % Get transformation of each link
+        %             linkPosition = linkPose(1:3, 4); % Extract position of the link
+        % 
+        %             if linkPosition(3) <= tableHeight
+        %                 disp(['Collision detected with the table at link ', num2str(linkIdx), ' at step ', num2str(j)]);
+        %                 return; % Stop movement if collision is detected
+        %             end
+        %         end
+        %     end
+        % end
+
         function armMove(self, pose, arm, steps)
             % Moves the robotic arm to the desired position
             % Inputs:
