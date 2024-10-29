@@ -3,7 +3,7 @@ classdef A2_main < handle
 
     properties(Constant)
         %% Constant variables
-        tableHeight = -0.01;
+        tableHeight = -0.1;
         % Animation steps:
         steps = 50;
     end
@@ -23,43 +23,43 @@ classdef A2_main < handle
     end
 
     methods
-        function self = A2_main()
-
-            self.loadFiles();
-            self.setClassVariables();
-
-            self.env.loadEnvironment();
-
-            while true
-
-                input_val = input('test or 0 to exit: ', 's');
-
-                switch input_val
-                    case 't'
-                        fprintf('runing');
-                        self.testingArmMovement();
-
-                    case 'tc'
-                        self.testingCollision();
-
-                    case 'd'
-                        self.guiDumplings();
-
-                    case 'p'
-                        self.guiPlates();
-
-                    case '0'
-                        disp('Exiting...');
-                        break;
-
-                end
-
-            end
-        end
+        % function self = A2_main()
+        % 
+        %     self.loadFiles();
+        %     self.setClassVariables();
+        %
+        %     self.env.loadEnvironment();
+        % 
+        %     while true
+        % 
+        %         input_val = input('test or 0 to exit: ', 's');
+        % 
+        %         switch input_val
+        %             case 't'
+        %                 fprintf('runing');
+        %                 self.testingArmMovement();
+        % 
+        %             case 'tc'
+        %                 self.testingCollision();
+        % 
+        %             case 'd'
+        %                 self.guiDumplings();
+        % 
+        %             case 'p'
+        %                 self.guiPlates();
+        % 
+        %             case '0'
+        %                 disp('Exiting...');
+        %                 break;
+        % 
+        %         end
+        % 
+        %     end
+        % end
     end
 
         methods
-            function testingArmMovement(self)
+            function orderFood(self)
 
                 % % UR3 to plate Movement
                 % for i = 1:size(self.env.platesInitial,2)
@@ -84,19 +84,19 @@ classdef A2_main < handle
                     dumplingPose = self.env.dumplingsInitial{i} * trotx(pi) * transl(0,0,0);
                     dumplingFinalPose = self.env.dumplingsFinal{i} * trotx(pi) * transl(0,0,0);
 
-                    % kukaPose = [-0.375;0;0.31];
-                    % 
-                    % kukaDist = norm(kukaPose(1:3) - dumplingFinalPose(1:3, 4));
-                    % 
-                    % if kukaDist < 0.7
-                    %     arm = self.env.kuka.model;
-                    % else
-                    %     arm = self.env.ur3.model;
-                    % end
+                    kukaPose = [-0.375;0;0.31];
 
-                    % self.move.armMove(dumplingPose, arm, self.steps);
-                    % 
-                    % self.move.objectMove(dumplingFinalPose, arm, self.steps, self.env.dumplings, i, [0,0,0]);
+                    kukaDist = norm(kukaPose(1:3) - dumplingFinalPose(1:3, 4));
+
+                    if kukaDist < 0.7
+                        arm = self.env.kuka.model;
+                    else
+                        arm = self.env.ur3.model;
+                    end
+
+                    self.move.armMoveCol(dumplingPose, arm, self.steps, self.tableHeight);
+
+                    self.move.objectMove(dumplingFinalPose, arm, self.steps, self.env.dumplings, i, [0,0,0]);
 
                     self.move.armMove(dumplingPose, self.env.kuka.model, self.steps);
 
@@ -122,7 +122,7 @@ classdef A2_main < handle
                         arm = self.env.kuka.model;
                     end
 
-                    self.move.armMove(platePose, arm, self.steps);
+                    self.move.armMoveCol(platePose, arm, self.steps, self.tableHeight);
 
                     self.move.objectMove(plateFinalPose, arm, self.steps, self.env.plates, i, [0,0,0]);
 
@@ -192,17 +192,17 @@ classdef A2_main < handle
               
             end
 
-            % function testingCollision(self)
-            %     % % bufferDistance = 0.005; % Smaller buffer distance to allow closer moves
-            %     % lastSafePosition = self.env.ur3.model.getpos(); % Initial safe position
-            %     % collisionOccurred = false; % Flag to stop all animation after collision
-            % 
-            %     for j = 1:size(self.env.platesInitial,2)
-            %         platePose = self.env.platesInitial{j} * trotx(pi) * transl(0,0,0.02);
-            % 
-            %         self.move.armMoveWithCollisionCheck(platePose, self.env.ur3.model, self.steps, self.tableHeight);
-            %     end
-            % end
+            function testingCollision(self)
+                % % bufferDistance = 0.005; % Smaller buffer distance to allow closer moves
+                % lastSafePosition = self.env.ur3.model.getpos(); % Initial safe position
+                % collisionOccurred = false; % Flag to stop all animation after collision
+
+                for j = 1:size(self.env.platesInitial,2)
+                    platePose = self.env.platesInitial{j} * trotx(pi) * transl(0,0,0.02);
+
+                    self.move.armMoveCol(platePose, self.env.ur3.model, self.steps, self.tableHeight);
+                end
+            end
 
             % Sets variables with classes
             function setClassVariables(self)

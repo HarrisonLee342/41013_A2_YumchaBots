@@ -69,36 +69,65 @@ classdef Movement < handle
         %     end
         % end
 
-        % function armMoveCol(self, pose, arm, steps, tableHeight)
-        %     % Moves the robotic arm to the desired position with collision checking
-        %     % Inputs:
-        %     % - Pose: Target position in transl format
-        %     % - Arm: Robotic arm model (self.env.kuka.model or self.env.ur3.model)
-        %     % - Steps: Number of steps for smoother animation
-        %     % - tableHeight: Height of the table to check for collisions
-        %     % - bufferDistance: Extra distance above the table to avoid collision
-        % 
-        %     joints = arm.ikcon(pose, arm.getpos);
-        %     q = jtraj(arm.getpos, joints, steps);
-        % 
-        %     for j = 1:size(q,1)
-        %         % Update the arm's configuration to the current step's joint positions
-        %         arm.animate(q(j,:));
-        %         drawnow();
-        %         pause(0.01);
-        % 
-        %         % Collision check at the current position
-        %         for linkIdx = 3:arm.n
-        %             linkPose = arm.A(1:linkIdx, q(j,:)).T; % Get transformation of each link
-        %             linkPosition = linkPose(1:3, 4); % Extract position of the link
-        % 
-        %             if linkPosition(3) <= tableHeight
-        %                 disp(['Collision detected with the table at link ', num2str(linkIdx), ' at step ', num2str(j)]);
-        %                 return; % Stop movement if collision is detected
-        %             end
-        %         end
-        %     end
-        % end
+        function armMoveCol(self, pose, arm, steps, tableHeight)
+            % Moves the robotic arm to the desired position with collision checking
+            % Inputs:
+            % - Pose: Target position in transl format
+            % - Arm: Robotic arm model (self.env.kuka.model or self.env.ur3.model)
+            % - Steps: Number of steps for smoother animation
+            % - tableHeight: Height of the table to check for collisions
+            % - bufferDistance: Extra distance above the table to avoid collision
+
+            joints = arm.ikcon(pose, arm.getpos);
+            q = jtraj(arm.getpos, joints, steps);
+
+            for j = 1:size(q,1)
+                % Update the arm's configuration to the current step's joint positions
+                arm.animate(q(j,:));
+                drawnow();
+                pause(0.01);
+
+                % Collision check at the current position
+                for linkIdx = 3:arm.n
+                    linkPose = arm.A(1:linkIdx, q(j,:)).T; % Get transformation of each link
+                    linkPosition = linkPose(1:3, 4); % Extract position of the link
+
+                    if linkPosition(3) <= tableHeight
+                        disp(['Collision detected with the table at link ', num2str(linkIdx), ' at step ', num2str(j)]);
+                        return; % Stop movement if collision is detected
+                    end
+                end
+            end
+        end
+
+        function collisionOccurred = armCol(self, pose, arm, steps, tableHeight)
+            % Moves the robotic arm to the desired position with collision checking
+            % Outputs:
+            % - collisionOccurred: Returns true if a collision was detected, otherwise false
+
+            joints = arm.ikcon(pose, arm.getpos);
+            q = jtraj(arm.getpos, joints, steps);
+            collisionOccurred = false;
+
+            for j = 1:size(q, 1)
+                % Collision check at the current position before animating
+                for linkIdx = 2:arm.n
+                    linkPose = arm.A(1:linkIdx, q(j, :)).T; % Get transformation of each link
+                    linkPosition = linkPose(1:3, 4); % Extract position of the link
+
+                    if linkPosition(3) <= tableHeight
+                        disp(['Collision detected with the table at link ', num2str(linkIdx), ' at step ', num2str(j)]);
+                        collisionOccurred = true;
+                        return; % Stop movement and return collision status if detected
+                    end
+                end
+
+                % Only animate if no collision was detected
+                arm.animate(q(j, :));
+                drawnow();
+                pause(0.01);
+            end
+        end
 
         function armMove(self, pose, arm, steps)
             % Moves the robotic arm to the desired position
