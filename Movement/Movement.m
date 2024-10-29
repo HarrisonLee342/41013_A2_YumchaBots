@@ -17,21 +17,51 @@ classdef Movement < handle
     end
 
     methods
-        function armMove(self, pose, arm, steps)
-            % Moves the robotic arm to the desired position
+        % function armMove(self, pose, arm, steps)
+        %     % Moves the robotic arm to the desired position
+        %     % Inputs:
+        %     % - Pose: Selected position in transl format
+        %     % - Arm: Robotic arm model (self.env.kuka.model or self.env.ur3.model)
+        %     % - Steps: How smooth you want the animation to be, higher is smoother
+        % 
+        %     joints = arm.ikcon(pose, arm.getpos);
+        % 
+        %     q = jtraj(arm.getpos,joints, steps);
+        %     for j = 1:size(q,1)
+        %         arm.animate(q(j,:));
+        %         drawnow();
+        %         pause(0.01);
+        % 
+        %     end
+
+        function armMoveWithCollisionCheck(self, pose, arm, steps, tableHeight)
+            % Moves the robotic arm to the desired position with collision checking
             % Inputs:
-            % - Pose: Selected position in transl format
+            % - Pose: Target position in transl format
             % - Arm: Robotic arm model (self.env.kuka.model or self.env.ur3.model)
-            % - Steps: How smooth you want the animation to be, higher is smoother
+            % - Steps: Number of steps for smoother animation
+            % - tableHeight: Height of the table to check for collisions
+            % - bufferDistance: Extra distance above the table to avoid collision
 
             joints = arm.ikcon(pose, arm.getpos);
+            q = jtraj(arm.getpos, joints, steps);
 
-            q = jtraj(arm.getpos,joints, steps);
             for j = 1:size(q,1)
+                % Update the arm's configuration to the current step's joint positions
                 arm.animate(q(j,:));
                 drawnow();
                 pause(0.01);
-                
+
+                % Collision check at the current position
+                for linkIdx = 3:arm.n
+                    linkPose = arm.A(1:linkIdx, q(j,:)).T; % Get transformation of each link
+                    linkPosition = linkPose(1:3, 4); % Extract position of the link
+
+                    if linkPosition(3) <= tableHeight
+                        disp(['Collision detected with the table at link ', num2str(linkIdx), ' at step ', num2str(j)]);
+                        return; % Stop movement if collision is detected
+                    end
+                end
             end
         end
 
@@ -108,7 +138,28 @@ classdef Movement < handle
             %         end
             % end
         end
+        
+
+        function predictedJointPositions = armMove(self, targetPose, robotModel, currentStep, totalSteps)
+            % Get current joint positions
+            currentJointPositions = robotModel.getpos();
+
+            % Define the start and target pose as SE3 objects
+            startPose = SE3(robotModel.fkine(currentJointPositions));
+            targetPoseSE3 = SE3(targetPose);
+
+            % Interpolate between start and target pose
+            intermediatePoses = ctraj(startPose, targetPoseSE3, totalSteps);
+
+            % Get the pose for the current step
+            stepPose = intermediatePoses(:, :, currentStep);
+
+            % Perform inverse kinematics for the current step
+            predictedJointPositions = robotModel.ikcon(stepPose, currentJointPositions);
+        end
     end
-end
+
+    end
+
 
 

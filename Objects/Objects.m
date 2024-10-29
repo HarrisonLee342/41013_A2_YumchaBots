@@ -124,7 +124,6 @@ classdef Objects < handle
                 h.link(1).Children.FaceColor = [0.8, 0.8, 0.8];  % Default to grey color
             end
 
-            hold on;
         end
 
     end
