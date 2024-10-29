@@ -6,6 +6,7 @@ classdef A2_main < handle
 
         % Animation steps:
         steps = 50;
+        
     end
 
     properties
@@ -20,15 +21,23 @@ classdef A2_main < handle
         % Testing
         gripper;
 
+        % Arduino Connection 
+        arduinoObj;
+        buttonPin = 'D2';
+
     end
 
     methods
+        cla;
         function self = A2_main()
 
             self.loadFiles();
             self.setClassVariables();
 
             self.env.loadEnvironment();
+
+            self.arduinoObj = arduino('COM5', 'Nano3');  
+            configurePin(self.arduinoObj, self.buttonPin, 'pullup'); 
 
             while true
 
@@ -82,27 +91,82 @@ classdef A2_main < handle
                 % end
                 
                 %% PLATES
-                for i= 1:size(self.env.platesInitial,2)
-                    platePose = self.env.platesInitial{i} * trotx(pi) * transl(0,0,-0.14);
-                    self.move.armMove(platePose, self.env.ur3.model, self.steps);
+                % for i= 1:size(self.env.platesInitial,2)
+                %     platePose = self.env.platesInitial{i} * trotx(pi) * transl(0,0,-0.14);
+                %     self.move.armMove(platePose, self.env.ur3.model, self.steps);
+                %     if self.isButtonPressed()
+                %         disp("Button pressed! Stopping movement.");
+                %         return;  % Exit the function to halt further movement
+                %     end
+                %     plateFinalPose = self.env.platesFinal{i} * trotx(pi) * transl(0,0,-0.14);
+                %     self.move.objectMove(plateFinalPose, self.env.ur3.model, self.steps, self.env.plates, i);
+                %     if self.isButtonPressed()
+                %         disp("Button pressed! Stopping movement.");
+                %         return;  % Exit the function to halt further movement
+                %     end
+                % end
 
-                    plateFinalPose = self.env.platesFinal{i} * trotx(pi) * transl(0,0,-0.14);
-                    self.move.objectMove(plateFinalPose, self.env.ur3.model, self.steps, self.env.plates, i);
-                    
+                    %% Button Press Detection Loop
+                    while true
+                        if self.isButtonPressed()
+                            disp('STOP');
+                            break; % Exit the loop or take necessary action
+                        end
+                
+                        for i= 1:size(self.env.platesInitial,2)
+                            platePose = self.env.platesInitial{i} * trotx(pi) * transl(0,0,-0.14);
+                            self.move.armMove(platePose, self.env.ur3.model, self.steps);
+        
+                            plateFinalPose = self.env.platesFinal{i} * trotx(pi) * transl(0,0,-0.14);
+                            self.move.objectMove(plateFinalPose, self.env.ur3.model, self.steps, self.env.plates, i);
+                            
+                        end
+                    end
                 end
-              
-            end
+            
+            
+                function pressed = isButtonPressed(self)
+                    % Read the button state
+                    buttonState = readDigitalPin(self.arduinoObj, self.buttonPin);
+                    pressed = (buttonState == 0);
+                end
+    
+                function setupArduino(self)
+                    % Clear existing Arduino object if it exists
+                    try
+                        if exist('self.arduinoObj', 'var') && ~isempty(self.arduinoObj)
+                            clear self.arduinoObj;  % Clear the existing Arduino object
+                            disp('Cleared existing Arduino connection.');
+                        end
+                    catch ME
+                        disp('Error clearing Arduino object:');
+                        disp(ME.message);
+                    end
+                
+                    % Create Arduino object
+                    try
+                        self.arduinoObj = arduino('COM5', 'Nano3'); 
+                        disp('Arduino connected.');
+                
+                        % Configure the button pin as pull-up
+                        configurePin(self.arduinoObj, self.buttonPin, 'Pullup');
+                    catch ME
+                        disp('Error connecting to Arduino:');
+                        disp(ME.message);
+                    end
+                end
 
-            % Sets variables with classes
-            function setClassVariables(self)
 
-                % Environment Class
-                self.env = Environment();
-   
-                % Movement Class
-                self.move = Movement();
-
-            end
+                % Sets variables with classes
+                function setClassVariables(self)
+    
+                    % Environment Class
+                    self.env = Environment();
+       
+                    % Movement Class
+                    self.move = Movement();
+    
+                end
         end
 
         methods(Static)
