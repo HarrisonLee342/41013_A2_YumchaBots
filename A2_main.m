@@ -71,24 +71,53 @@ classdef A2_main < handle
 
                 %% TESTING
                 
-                %% DUMPLINGS
-                % for i= 1:size(self.env.dumplingsInitial,2)
-                %     dumplingPose = self.env.dumplingsInitial{i} * trotx(pi) * transl(0,0,-0.14);
-                %     self.move.armMove(dumplingPose, self.env.kuka.model, self.steps);
-                % 
-                %     dumplingFinalPose = self.env.dumplingsFinal{i} * trotx(pi) * transl(0,0,-0.14);
-                %     self.move.objectMove(dumplingFinalPose, self.env.kuka.model, self.steps, self.env.dumplings, i);
-                % 
-                % end
-                
-                %% PLATES
-                for i= 1:size(self.env.platesInitial,2)
-                    platePose = self.env.platesInitial{i} * trotx(pi) * transl(0,0,-0.14);
-                    self.move.armMove(platePose, self.env.ur3.model, self.steps);
+                % DUMPLINGS
+                for i= 1:size(self.env.dumplingsInitial,2)
+                    dumplingPose = self.env.dumplingsInitial{i} * trotx(pi) * transl(0,0,0);
+                    dumplingFinalPose = self.env.dumplingsFinal{i} * trotx(pi) * transl(0,0,0);
 
-                    plateFinalPose = self.env.platesFinal{i} * trotx(pi) * transl(0,0,-0.14);
-                    self.move.objectMove(plateFinalPose, self.env.ur3.model, self.steps, self.env.plates, i);
+                    kukaPose = [-0.375;0;0.31];
                     
+                    kukaDist = norm(kukaPose(1:3) - dumplingFinalPose(1:3, 4));
+                    
+                    if kukaDist < 0.7
+                        arm = self.env.kuka.model;
+                    else
+                        arm = self.env.ur3.model;
+                    end
+
+                    self.move.armMove(dumplingPose, arm, self.steps);
+
+                    
+                    self.move.objectMove(dumplingFinalPose, arm, self.steps, self.env.dumplings, i, [0,0,0]);
+
+                    self.env.dumplings.model{i}.base = self.env.dumplingsFinal{i};
+                    self.env.dumplings.model{i}.animate(0);
+                    pause(0.1);
+                end
+                
+                % PLATES
+                for i= 1:size(self.env.platesInitial,2)
+                    platePose = self.env.platesInitial{i} * trotx(pi) * transl(0,0,0);
+                    plateFinalPose = self.env.platesFinal{i} * trotx(pi) * transl(0,0,0);
+                    
+                    ur3Pose = [0.375;0;0.31];
+
+                    ur3Dist = norm(ur3Pose(1:3) - plateFinalPose(1:3, 4));
+                    
+                    if ur3Dist < 0.6
+                        arm = self.env.ur3.model;
+                    else
+                        arm = self.env.kuka.model;
+                    end
+
+                    self.move.armMove(platePose, arm, self.steps);
+
+                    self.move.objectMove(plateFinalPose, arm, self.steps, self.env.plates, i, [0,0,0]);
+
+                    self.env.plates.model{i}.base = self.env.platesFinal{i};
+                    self.env.plates.model{i}.animate(0);
+                    pause(0.1);
                 end
               
             end
