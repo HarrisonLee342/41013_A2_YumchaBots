@@ -39,12 +39,15 @@ classdef YumchaCart < RobotBaseClass
 
         %% CreateModel
         function CreateModel(self)
+
+            % test, z = -0.39, x = -0.18, trotz = -pi/2
+
             % link = Link([offset     d       a       alpha    'prismatic']);
 
-            link(1) = Link([0     0.001   0    pi/2     0]);
-            link(2) = Link([0       0     0   -pi/2   1]); % PRIMATIC LINK
+            link(1) = Link([0     0.0001   0    pi/2     0]);
+            link(2) = Link([0       0      0   -pi/2     1]); % PRIMATIC LINK
 
-            link(1).qlim = [-360 360]*pi/180;
+            link(1).qlim = [-180 180]*pi/180;
             link(2).qlim = [-10 10]; % Limits for the PRISMATIC joint
 
             % link(1) = Link([ 0     0.001   0    -pi/2   1]); % PRIMATIC LINK
